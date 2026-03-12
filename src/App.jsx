@@ -3,6 +3,7 @@ import Book from './pages/Book'
 import { Routes } from 'react-router-dom'
 import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
+import Home from './pages/Home'
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Route path="/book" element={<Book />}/>
       <Route path="/contact" elemenet={<Contact />}/>
       <Route path="/gallery" elemenet={<Gallery />}/>
+      <Route path="/" element={<Home />} />
    </Routes> 
   )
 }
