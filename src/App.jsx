@@ -18,6 +18,7 @@ function App() {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
         <Route patch="/login" elemenet={<Login />} />
+        <Route path="/register" element={<Register />} />
     </Route>
    </Routes> 
   )
