@@ -17,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
+        <Route patch="/login" elemenet={<Login />} />
     </Route>
    </Routes> 
   )
