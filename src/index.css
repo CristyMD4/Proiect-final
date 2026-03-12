@@ -1,3 +1,6 @@
 :root {
   --sw-blue: #1d4ed8;
 }
+html, body{
+  height: 100%;
+}
