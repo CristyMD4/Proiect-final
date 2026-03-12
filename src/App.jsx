@@ -5,6 +5,7 @@ import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Home from './pages/Home'
 import Pricing from './pages/Pricing'
+import Services from './pages/Services'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/gallery" elemenet={<Gallery />}/>
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/services" element={<Services />} />
     </Route>
    </Routes> 
   )
