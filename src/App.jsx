@@ -4,6 +4,7 @@ import { Routes } from 'react-router-dom'
 import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Home from './pages/Home'
+import Pricing from './pages/Pricing'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/contact" elemenet={<Contact />}/>
         <Route path="/gallery" elemenet={<Gallery />}/>
         <Route path="/" element={<Home />} />
+        <Route path="/pricing" element={<Pricing />} />
     </Route>
    </Routes> 
   )
