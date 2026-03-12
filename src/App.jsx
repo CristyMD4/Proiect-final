@@ -6,6 +6,8 @@ import Gallery from './pages/Gallery'
 import Home from './pages/Home'
 import Pricing from './pages/Pricing'
 import Services from './pages/Services'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 function App() {
   return (
