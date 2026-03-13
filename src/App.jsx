@@ -11,6 +11,8 @@ import Register from './pages/Register'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
 
+import AdminLogin from './admin/AdminLogin.jsx'
+
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route patch="/login" elemenet={<Login />} />
         <Route path="/register" element={<Register />} />
     </Route>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        
         <Route path="/admin" element={<AdminLayout />}>
 
         </Route>
