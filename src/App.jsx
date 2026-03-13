@@ -13,6 +13,7 @@ import AdminLayout from "./layouts/AdminLayout.jsx";
 
 import AdminLogin from './admin/AdminLogin.jsx'
 import AdminBookings from "./admin/Bookings.jsx";
+import AdminDashboard from "./admin/Dashboard.jsx";
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
     </Route>
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="bookings" element={<AdminBookings />} />
-        
+        <Route path="dashboard" element={<AdminDashboard />} />
+
         <Route path="/admin" element={<AdminLayout />}>
 
         </Route>
