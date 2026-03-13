@@ -15,6 +15,7 @@ import AdminLogin from './admin/AdminLogin.jsx'
 import AdminBookings from "./admin/Bookings.jsx";
 import AdminDashboard from "./admin/Dashboard.jsx";
 import AdminLocations from "./admin/Locations.jsx";
+import AdminMessages from "./admin/Messages.jsx";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="locations" element={<AdminLocations />} />
+        <Route path="messages" element={<AdminMessages />} />
 
         <Route path="/admin" element={<AdminLayout />}>
 
