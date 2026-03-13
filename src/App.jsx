@@ -12,7 +12,7 @@ import Register from './pages/Register'
 import AdminLayout from "./layouts/AdminLayout.jsx";
 
 import AdminLogin from './admin/AdminLogin.jsx'
-
+import AdminBookings from "./admin/Bookings.jsx";
 
 function App() {
   return (
@@ -28,6 +28,7 @@ function App() {
         <Route path="/register" element={<Register />} />
     </Route>
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="bookings" element={<AdminBookings />} />
         
         <Route path="/admin" element={<AdminLayout />}>
 
