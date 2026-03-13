@@ -9,6 +9,9 @@ import Services from './pages/Services'
 import Login from './pages/Login'
 import Register from './pages/Register'
 
+import AdminLayout from "./layouts/AdminLayout.jsx";
+
+
 function App() {
   return (
    <Routes>
@@ -22,6 +25,10 @@ function App() {
         <Route patch="/login" elemenet={<Login />} />
         <Route path="/register" element={<Register />} />
     </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+
+        </Route>
+
    </Routes> 
   )
 }
