@@ -7,6 +7,9 @@ import Home from './pages/Home'
 import Pricing from './pages/Pricing'
 import Services from './pages/Services'
 
+import AdminLayout from "./layouts/AdminLayout.jsx";
+
+
 function App() {
   return (
    <Routes>
@@ -18,6 +21,10 @@ function App() {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
     </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+
+        </Route>
+
    </Routes> 
   )
 }
