@@ -6,6 +6,8 @@ import Gallery from './pages/Gallery'
 import Home from './pages/Home'
 import Pricing from './pages/Pricing'
 import Services from './pages/Services'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
 
@@ -20,6 +22,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
+        <Route patch="/login" elemenet={<Login />} />
+        <Route path="/register" element={<Register />} />
     </Route>
         <Route path="/admin" element={<AdminLayout />}>
 
