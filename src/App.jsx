@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
 
 import AdminLogin from './admin/AdminLogin.jsx'
 import AdminBookings from "./admin/Bookings.jsx";

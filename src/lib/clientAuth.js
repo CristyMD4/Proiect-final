@@ -1,5 +1,3 @@
-// src/lib/clientAuth.js
-
 const USERS_KEY = "sw_clients_v1";
 const SESSION_KEY = "sw_client_session_v1";
 
