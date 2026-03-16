@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Book from './pages/Book'
 import { Routes } from 'react-router-dom'
 import Contact from './pages/Contact'
@@ -10,9 +9,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
-import AdminLayout from "./layouts/AdminLayout.jsx";
-
-import AdminLogin from './admin/AdminLogin.jsx'
+import SiteLayout from "./layouts/SiteLayout.jsx";
+import AdminLogin from './admin/AdminLogin.jsx';
 import AdminBookings from "./admin/Bookings.jsx";
 import AdminDashboard from "./admin/Dashboard.jsx";
 import AdminLocations from "./admin/Locations.jsx";
