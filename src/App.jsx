@@ -1,5 +1,5 @@
 import Book from './pages/Book'
-import { Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Home from './pages/Home'
@@ -27,20 +27,17 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
-        <Route patch="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-    </Route>
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="bookings" element={<AdminBookings />} />
+      </Route>
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="locations" element={<AdminLocations />} />
+        <Route path="bookings" element={<AdminBookings />} />
         <Route path="messages" element={<AdminMessages />} />
         <Route path="testimonials" element={<AdminTestimonials />} />
-
-        <Route path="/admin" element={<AdminLayout />}>
-
-        </Route>
-
+      </Route>
    </Routes> 
   )
 }
