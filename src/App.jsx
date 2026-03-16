@@ -24,12 +24,12 @@ function App() {
    <Routes>
       <Route element={<SiteLayout/>}>
         <Route path="/book" element={<Book />}/>
-        <Route path="/contact" elemenet={<Contact />}/>
-        <Route path="/gallery" elemenet={<Gallery />}/>
+        <Route path="/contact" element={<Contact />}/>
+        <Route path="/gallery" element={<Gallery />}/>
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
-        <Route patch="/login" elemenet={<Login />} />
+        <Route patch="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
     </Route>
         <Route path="/admin/login" element={<AdminLogin />} />

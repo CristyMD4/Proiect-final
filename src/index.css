@@ -13,3 +13,81 @@ body{
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
     "Apple Color Emoji", "Segoe UI Emoji";
 }
+.container-page {
+  @apply mx-auto w-full max-w-6xl px-4;
+}
+
+.card {
+  @apply rounded-2xl bg-white shadow-[0_8px_30px_rgba(15,23,42,0.08)] border border-slate-100;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold transition;
+}
+
+.btn-primary {
+  @apply bg-[var(--sw-blue)] text-white hover:brightness-110;
+}
+
+.btn-outline {
+  @apply bg-white text-slate-900 border border-slate-200 hover:bg-slate-50;
+}
+
+.badge {
+  @apply inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700;
+}
+
+
+.sw-sphere {
+  width: 80px;
+  height: 80px;
+  border-radius: 9999px;
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(125, 211, 252, 0.95),
+      rgba(34, 211, 238, 0.35) 40%,
+      rgba(2, 6, 23, 0) 70%
+    ),
+    radial-gradient(
+      circle at 60% 70%,
+      rgba(56, 189, 248, 0.35),
+      rgba(2, 6, 23, 0.9) 70%
+    );
+
+  box-shadow:
+    0 0 30px rgba(56, 189, 248, 0.28),
+    inset 0 0 22px rgba(56, 189, 248, 0.22);
+}
+
+.sw-sphere::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 40% 40%,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0) 55%
+  );
+  opacity: 0.9;
+}
+
+.sw-sphere--active {
+  box-shadow:
+    0 0 45px rgba(56, 189, 248, 0.45),
+    inset 0 0 24px rgba(56, 189, 248, 0.25);
+}
+
+.sw-sphere--hover {
+  box-shadow:
+    0 0 40px rgba(56, 189, 248, 0.35),
+    inset 0 0 24px rgba(56, 189, 248, 0.22);
+}
+
+.sw-sphere--sm {
+  width: 48px;
+  height: 48px;
+}
