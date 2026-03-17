@@ -22,7 +22,7 @@ const ROLE_OPTIONS = [
     description: "Track bays, bookings, and customer follow-up from the employee dashboard.",
     demo: { email: "employee@sparklewash.com", password: "employee123" },
     registerAllowed: true,
-    action: "/",
+    action: "/employee/dashboard",
   },
   {
     key: "admin",

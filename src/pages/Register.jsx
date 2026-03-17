@@ -19,7 +19,7 @@ const ROLE_OPTIONS = [
     title: "Create a staff account",
     description: "Set up a staff login for shift notes, bookings, and daily operations.",
     submitText: "Create employee account",
-    redirectTo: "/",
+    redirectTo: "/employee/dashboard",
   },
 ];
 
