@@ -131,6 +131,52 @@
     "services": "Services",
     "rights": "All rights reserved."
   },
+  "auth": {
+    "backToSite": "Back to site",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "password": "Password",
+      "confirmPassword": "Confirm password"
+    },
+    "placeholders": {
+      "name": "Alex Spark"
+    },
+    "login": {
+      "title": "Sign in",
+      "loading": "Signing in...",
+      "submit": "Access account",
+      "noAccount": "Need an account?",
+      "register": "Register here"
+    },
+    "register": {
+      "loading": "Creating account...",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in"
+    },
+    "errors": {
+      "emailExists": "An account with this email already exists.",
+      "invalidCredentials": "Invalid email or password.",
+      "passwordMismatch": "Passwords do not match.",
+      "passwordTooShort": "Password must be at least 6 characters."
+    }
+  },
+  "account": {
+    "badge": "Customer Account",
+    "title": "Welcome back, {{name}}",
+    "subtitle": "Your account is ready for quick bookings, visit details, and profile access.",
+    "name": "Name",
+    "email": "Email",
+    "bookWash": "Book a Wash",
+    "exploreServices": "Explore Services",
+    "quickActions": "Quick Actions",
+    "fasterBooking": "Faster booking",
+    "fasterBookingDesc": "Your customer info stays available for the next time you schedule a visit.",
+    "support": "Need support?",
+    "supportDesc": "Reach out through the contact page and mention the email on this account.",
+    "logout": "Log out"
+  },
   "admin": {
     "title": "Admin Panel",
     "signIn": "Sign in to manage your car wash",

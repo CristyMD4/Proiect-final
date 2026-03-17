@@ -74,6 +74,52 @@
     }
   },
   "footer": { "tagline": "Надежная мойка и детейлинг с 2010 года.", "quickLinks": "Навигация", "followUs": "Мы в соцсетях", "services": "Услуги", "rights": "Все права защищены." },
+  "auth": {
+    "backToSite": "Назад на сайт",
+    "fields": {
+      "name": "Полное имя",
+      "email": "Email",
+      "phone": "Телефон",
+      "password": "Пароль",
+      "confirmPassword": "Подтвердите пароль"
+    },
+    "placeholders": {
+      "name": "Alex Spark"
+    },
+    "login": {
+      "title": "Вход",
+      "loading": "Выполняется вход...",
+      "submit": "Открыть аккаунт",
+      "noAccount": "Нет аккаунта?",
+      "register": "Зарегистрироваться"
+    },
+    "register": {
+      "loading": "Создаём аккаунт...",
+      "hasAccount": "Уже есть аккаунт?",
+      "login": "Войти"
+    },
+    "errors": {
+      "emailExists": "Аккаунт с таким email уже существует.",
+      "invalidCredentials": "Неверный email или пароль.",
+      "passwordMismatch": "Пароли не совпадают.",
+      "passwordTooShort": "Пароль должен содержать минимум 6 символов."
+    }
+  },
+  "account": {
+    "badge": "Аккаунт клиента",
+    "title": "С возвращением, {{name}}",
+    "subtitle": "Ваш аккаунт готов для быстрых записей, данных о визитах и доступа к профилю.",
+    "name": "Имя",
+    "email": "Email",
+    "bookWash": "Записаться на мойку",
+    "exploreServices": "Посмотреть услуги",
+    "quickActions": "Быстрые действия",
+    "fasterBooking": "Быстрая запись",
+    "fasterBookingDesc": "Ваши данные останутся доступными для следующей записи.",
+    "support": "Нужна помощь?",
+    "supportDesc": "Свяжитесь с нами через страницу контактов и укажите email этого аккаунта.",
+    "logout": "Выйти"
+  },
   "admin": {
     "title": "Админ панель",
     "signIn": "Войдите для управления",

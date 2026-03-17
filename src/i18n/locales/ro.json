@@ -74,6 +74,52 @@
     }
   },
   "footer": { "tagline": "Serviciu de spălare și detailing de încredere din 2010.", "quickLinks": "Linkuri rapide", "followUs": "Urmărește-ne", "services": "Servicii", "rights": "Toate drepturile rezervate." },
+  "auth": {
+    "backToSite": "Înapoi la site",
+    "fields": {
+      "name": "Nume complet",
+      "email": "Email",
+      "phone": "Telefon",
+      "password": "Parolă",
+      "confirmPassword": "Confirmă parola"
+    },
+    "placeholders": {
+      "name": "Alex Spark"
+    },
+    "login": {
+      "title": "Autentificare",
+      "loading": "Se autentifică...",
+      "submit": "Accesează contul",
+      "noAccount": "Nu ai cont?",
+      "register": "Înregistrează-te aici"
+    },
+    "register": {
+      "loading": "Se creează contul...",
+      "hasAccount": "Ai deja cont?",
+      "login": "Autentifică-te"
+    },
+    "errors": {
+      "emailExists": "Există deja un cont cu acest email.",
+      "invalidCredentials": "Email sau parolă incorectă.",
+      "passwordMismatch": "Parolele nu coincid.",
+      "passwordTooShort": "Parola trebuie să aibă cel puțin 6 caractere."
+    }
+  },
+  "account": {
+    "badge": "Cont Client",
+    "title": "Bine ai revenit, {{name}}",
+    "subtitle": "Contul tău este pregătit pentru programări rapide, detalii despre vizite și acces la profil.",
+    "name": "Nume",
+    "email": "Email",
+    "bookWash": "Programează o spălare",
+    "exploreServices": "Vezi serviciile",
+    "quickActions": "Acțiuni rapide",
+    "fasterBooking": "Programare mai rapidă",
+    "fasterBookingDesc": "Datele tale rămân disponibile pentru următoarea programare.",
+    "support": "Ai nevoie de ajutor?",
+    "supportDesc": "Contactează-ne din pagina de contact și menționează emailul acestui cont.",
+    "logout": "Deconectare"
+  },
   "admin": {
     "title": "Panou Admin",
     "signIn": "Autentifică-te pentru a gestiona spălătoria",
