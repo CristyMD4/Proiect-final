@@ -1,5 +1,5 @@
 import Book from './pages/Book'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Home from './pages/Home'
@@ -10,12 +10,13 @@ import Register from './pages/Register'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import SiteLayout from "./layouts/SiteLayout.jsx";
-import AdminLogin from './admin/AdminLogin.jsx';
 import AdminBookings from "./admin/Bookings.jsx";
 import AdminDashboard from "./admin/Dashboard.jsx";
 import AdminLocations from "./admin/Locations.jsx";
 import AdminMessages from "./admin/Messages.jsx";
 import AdminTestimonials from "./admin/Testimonials.jsx";
+import EmployeeLayout from "./employee/EmployeeLayout.jsx";
+import EmployeeDashboard from "./employee/Dashboard.jsx";
 
 function App() {
   return (
@@ -30,13 +31,16 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
-      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin/login" element={<Navigate to="/login?role=admin" replace />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="locations" element={<AdminLocations />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="messages" element={<AdminMessages />} />
         <Route path="testimonials" element={<AdminTestimonials />} />
+      </Route>
+      <Route path="/employee" element={<EmployeeLayout />}>
+        <Route path="dashboard" element={<EmployeeDashboard />} />
       </Route>
    </Routes> 
   )

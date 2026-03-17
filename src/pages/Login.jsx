@@ -1,215 +1,238 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { loginClient, getClientSession } from "../lib/clientAuth.js";
+import { adminLogin, getAdminSession } from "../lib/adminAuth.js";
+import { getEmployeeSession, loginEmployee } from "../lib/employeeAuth.js";
+
+const ROLE_OPTIONS = [
+  {
+    key: "customer",
+    eyebrow: "Customer Access",
+    title: "Book and manage wash appointments",
+    description: "Use your customer account to save bookings and stay in sync with your next visit.",
+    demo: null,
+    registerAllowed: true,
+    action: "/",
+  },
+  {
+    key: "employee",
+    eyebrow: "Employee Access",
+    title: "Open the staff workspace",
+    description: "Track bays, bookings, and customer follow-up from the employee dashboard.",
+    demo: { email: "employee@sparklewash.com", password: "employee123" },
+    registerAllowed: true,
+    action: "/employee/dashboard",
+  },
+  {
+    key: "admin",
+    eyebrow: "Admin Console",
+    title: "Secure operational control",
+    description: "Manage locations, testimonials, bookings, and messages from the admin area.",
+    demo: { email: "admin@sparklewash.com", password: "admin123" },
+    registerAllowed: false,
+    action: "/admin/dashboard",
+  },
+];
+
+function getRoleConfig(role) {
+  return ROLE_OPTIONS.find((option) => option.key === role) || ROLE_OPTIONS[0];
+}
+
+function getSessionForRole(role) {
+  if (role === "admin") return getAdminSession();
+  if (role === "employee") return getEmployeeSession();
+  return getClientSession();
+}
+
+function loginByRole(role, credentials) {
+  if (role === "admin") return adminLogin(credentials.email, credentials.password);
+  if (role === "employee") return loginEmployee(credentials);
+  return loginClient(credentials);
+}
 
 export default function Login() {
   const { t } = useTranslation();
   const nav = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialRole = searchParams.get("role") || "customer";
 
+  const [role, setRole] = useState(initialRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // daca e deja logat redirecteaza
-  if (getClientSession()) {
-    nav("/", { replace: true });
-    return null;
-  }
+  const roleConfig = useMemo(() => getRoleConfig(role), [role]);
+
+  useEffect(() => {
+    setRole(initialRole);
+  }, [initialRole]);
+
+  useEffect(() => {
+    const session = getSessionForRole(role);
+    if (session) {
+      nav(roleConfig.action, { replace: true });
+    }
+  }, [nav, role, roleConfig]);
+
+  const updateRole = (nextRole) => {
+    setRole(nextRole);
+    setErr("");
+    setEmail("");
+    setPassword("");
+    setSearchParams({ role: nextRole });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErr("");
     setLoading(true);
 
-    const res = loginClient({ email, password });
+    const result = loginByRole(role, { email, password });
+
     setLoading(false);
 
-    if (!res.ok) {
-      setErr(t(res.error, { defaultValue: res.error }));
+    if (!result.ok) {
+      setErr(t(result.error, { defaultValue: result.error }));
       return;
     }
 
-    nav("/", { replace: true });
+    nav(roleConfig.action, { replace: true });
   };
 
   return (
-    <div className="min-h-screen bg-[#04080f] flex items-center justify-center px-4 py-10 relative overflow-hidden">
-
-      {/* Grid background */}
+    <div className="min-h-screen bg-[#07111f] text-slate-100 relative overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(34,211,238,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,0.025) 1px,transparent 1px)",
-          backgroundSize: "44px 44px",
+            "linear-gradient(rgba(56,189,248,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.05) 1px, transparent 1px)",
+          backgroundSize: "36px 36px",
         }}
       />
+      <div className="absolute -top-24 left-[-120px] h-[360px] w-[360px] rounded-full bg-sky-500/10 blur-3xl" />
+      <div className="absolute bottom-[-160px] right-[-120px] h-[420px] w-[420px] rounded-full bg-cyan-400/10 blur-3xl" />
 
-      {/* Glow */}
-      <div className="absolute bottom-[-300px] left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle,rgba(34,211,238,0.06) 0%,transparent 65%)" }}
-      />
-
-      {/* Card */}
-      <div className="relative z-10 w-full max-w-[420px] rounded-[20px] px-9 py-10"
-        style={{
-          background: "rgba(10,18,32,0.85)",
-          border: "1px solid rgba(34,211,238,0.15)",
-          backdropFilter: "blur(20px)",
-          boxShadow: "0 40px 80px rgba(0,0,0,0.5),0 0 60px rgba(34,211,238,0.04)",
-        }}
-      >
-        {/* Logo */}
-        <div className="text-center mb-1 font-extrabold text-[22px] tracking-widest"
-          style={{ fontFamily: "'Syne',sans-serif", color: "#22d3ee" }}>
-          Sparkle<span style={{ color: "#334155" }}>Wash</span>
-        </div>
-        <p className="text-center text-[11px] tracking-widest mb-8"
-          style={{ color: "#475569", fontFamily: "'DM Mono',monospace" }}>
-          {t("auth.login.subtitle", { defaultValue: "Contul tău · Acces Securizat" })}
-        </p>
-
-        <h1 className="text-center text-[18px] font-bold text-slate-200 mb-6"
-          style={{ fontFamily: "'Syne',sans-serif" }}>
-          {t("auth.login.title", { defaultValue: "Autentificare" })}
-        </h1>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
-          {/* Email */}
-          <div>
-            <label className="block text-[9px] font-bold tracking-[0.18em] uppercase mb-2"
-              style={{ color: "#475569", fontFamily: "'DM Mono',monospace" }}>
-              {t("auth.fields.email", { defaultValue: "Email" })}
-            </label>
-            <input
-              type="email"
-              placeholder="email@exemplu.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full h-[46px] rounded-[10px] px-[14px] text-[13px] text-slate-200 outline-none transition-all"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(34,211,238,0.12)",
-                fontFamily: "'DM Mono',monospace",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "rgba(34,211,238,0.4)";
-                e.target.style.boxShadow = "0 0 0 3px rgba(34,211,238,0.07)";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "rgba(34,211,238,0.12)";
-                e.target.style.boxShadow = "none";
-              }}
-            />
-          </div>
-
-          {/* Parola */}
-          <div>
-            <label className="block text-[9px] font-bold tracking-[0.18em] uppercase mb-2"
-              style={{ color: "#475569", fontFamily: "'DM Mono',monospace" }}>
-              {t("auth.fields.password", { defaultValue: "Parolă" })}
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full h-[46px] rounded-[10px] px-[14px] text-[13px] text-slate-200 outline-none transition-all"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(34,211,238,0.12)",
-                fontFamily: "'DM Mono',monospace",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "rgba(34,211,238,0.4)";
-                e.target.style.boxShadow = "0 0 0 3px rgba(34,211,238,0.07)";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "rgba(34,211,238,0.12)";
-                e.target.style.boxShadow = "none";
-              }}
-            />
-          </div>
-
-          {/* Eroare */}
-          {err && (
-            <div className="rounded-[9px] px-[14px] py-[10px] text-[12px]"
-              style={{
-                background: "rgba(248,113,113,0.08)",
-                border: "1px solid rgba(248,113,113,0.2)",
-                color: "#fca5a5",
-                fontFamily: "'DM Mono',monospace",
-              }}>
-              {err}
+      <div className="relative container-page py-12 md:py-16">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <section className="max-w-xl">
+            <div className="inline-flex rounded-full border border-sky-300/15 bg-slate-950/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-200">
+              Unified Access
             </div>
-          )}
+            <h1 className="mt-6 text-4xl font-black tracking-tight text-white md:text-6xl">
+              One login flow for customers, employees, and admins.
+            </h1>
+            <p className="mt-5 text-lg leading-8 text-slate-300">
+              Choose your role, sign in with the right account, and we will send you to the matching workspace.
+            </p>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-[46px] mt-2 rounded-[10px] text-[12px] font-bold tracking-[0.1em] uppercase cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{
-              background: "rgba(34,211,238,0.12)",
-              border: "1px solid rgba(34,211,238,0.3)",
-              color: "#67e8f9",
-              fontFamily: "'DM Mono',monospace",
-            }}
-            onMouseEnter={(e) => {
-              if (!loading) {
-                e.target.style.background = "rgba(34,211,238,0.2)";
-                e.target.style.boxShadow = "0 0 20px rgba(34,211,238,0.12)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "rgba(34,211,238,0.12)";
-              e.target.style.boxShadow = "none";
-            }}
-          >
-            {loading
-              ? t("auth.login.loading", { defaultValue: "Se verifică..." })
-              : t("auth.login.submit", { defaultValue: "Intră în cont →" })}
-          </button>
-        </form>
+            <div className="mt-8 grid gap-4">
+              {ROLE_OPTIONS.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  onClick={() => updateRole(option.key)}
+                  className={
+                    "rounded-[24px] border p-5 text-left transition " +
+                    (role === option.key
+                      ? "border-sky-300/40 bg-sky-400/10 shadow-[0_0_0_1px_rgba(56,189,248,0.2)]"
+                      : "border-white/10 bg-slate-950/30 hover:border-sky-300/20 hover:bg-white/5")
+                  }
+                >
+                  <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-200">
+                    {option.eyebrow}
+                  </div>
+                  <div className="mt-2 text-xl font-extrabold text-white">{option.title}</div>
+                  <div className="mt-2 text-sm leading-6 text-slate-300">{option.description}</div>
+                </button>
+              ))}
+            </div>
+          </section>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-5">
-          <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
-          <span className="text-[11px]" style={{ color: "#1e293b", fontFamily: "'DM Mono',monospace" }}>
-            {t("auth.or", { defaultValue: "sau" })}
-          </span>
-          <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
+          <section className="rounded-[30px] border border-white/10 bg-slate-950/70 p-7 shadow-2xl shadow-sky-950/20 backdrop-blur-xl md:p-9">
+            <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-200">
+              {roleConfig.eyebrow}
+            </div>
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-white">
+              {t("auth.login.title", { defaultValue: "Sign in" })}
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              {roleConfig.description}
+            </p>
+
+            <form onSubmit={handleSubmit} className="mt-8 grid gap-4">
+              <div>
+                <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
+                  {t("auth.fields.email", { defaultValue: "Email" })}
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="email@example.com"
+                  required
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none transition focus:border-sky-300/40 focus:bg-white/10"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
+                  {t("auth.fields.password", { defaultValue: "Password" })}
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none transition focus:border-sky-300/40 focus:bg-white/10"
+                />
+              </div>
+
+              {err && (
+                <div className="rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">
+                  {err}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-2 h-12 rounded-2xl bg-sky-400 font-bold text-slate-950 transition hover:bg-sky-300 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading
+                  ? t("auth.login.loading", { defaultValue: "Signing in..." })
+                  : t("auth.login.submit", { defaultValue: "Access account" })}
+              </button>
+            </form>
+
+            {roleConfig.demo && (
+              <div className="mt-6 rounded-2xl border border-sky-300/10 bg-sky-400/5 p-4 text-sm text-slate-300">
+                <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-sky-200">
+                  Demo Credentials
+                </div>
+                <div className="mt-3">{roleConfig.demo.email}</div>
+                <div>{roleConfig.demo.password}</div>
+              </div>
+            )}
+
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-300">
+              {roleConfig.registerAllowed ? (
+                <Link className="text-sky-300 hover:text-sky-200" to={`/register?role=${role}`}>
+                  {t("auth.login.noAccount", { defaultValue: "Need an account?" })}{" "}
+                  {t("auth.login.register", { defaultValue: "Register here" })}
+                </Link>
+              ) : (
+                <span>Admin accounts are managed internally.</span>
+              )}
+
+              <Link className="text-slate-400 hover:text-white" to="/">
+                {t("auth.backToSite", { defaultValue: "Back to site" })}
+              </Link>
+            </div>
+          </section>
         </div>
-
-        {/* Link catre register */}
-        <Link
-          to="/register"
-          className="block text-center text-[12px] mt-1 transition-colors"
-          style={{ color: "#475569", fontFamily: "'DM Mono',monospace", textDecoration: "none" }}
-          onMouseEnter={(e) => (e.target.style.color = "#22d3ee")}
-          onMouseLeave={(e) => (e.target.style.color = "#475569")}
-        >
-          {t("auth.login.noAccount", { defaultValue: "Nu ai cont?" })}{" "}
-          <strong style={{ color: "#22d3ee" }}>
-            {t("auth.login.register", { defaultValue: "Înregistrează-te" })}
-          </strong>
-        </Link>
-
-        {/* Inapoi la site */}
-        <Link
-          to="/"
-          className="block text-center mt-5 text-[11px] transition-colors"
-          style={{ color: "#1e293b", fontFamily: "'DM Mono',monospace", textDecoration: "none" }}
-          onMouseEnter={(e) => (e.target.style.color = "#475569")}
-          onMouseLeave={(e) => (e.target.style.color = "#1e293b")}
-        >
-          ← {t("auth.backToSite", { defaultValue: "Înapoi la site" })}
-        </Link>
       </div>
     </div>
   );
