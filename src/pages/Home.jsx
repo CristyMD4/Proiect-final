@@ -78,10 +78,10 @@ function Testimonial({ name, role, text }) {
 export default function Home() {
   const { t } = useTranslation();
 
-  const svc = t("services.cards", { returnObjects: true });
-  const plans = t("pricing.plans", { returnObjects: true });
-  const why = t("why.items", { returnObjects: true });
-  const testimonials = t("testimonials.cards", { returnObjects: true });
+  const svc = t("services.cards", { returnObjects: true }) || {};
+  const plans = t("pricing.plans", { returnObjects: true }) || {};
+  const why = t("why.items", { returnObjects: true }) || {};
+  const testimonials = t("testimonials.cards", { returnObjects: true }) || [];
 
   return (
     <div>
@@ -120,28 +120,28 @@ export default function Home() {
       {/* SERVICES */}
       <Section title={t("services.title")} subtitle={t("services.subtitle")}> 
         <div className="grid gap-6 md:grid-cols-3">
-          <ServiceCard icon="sparkle" title={svc.full.title} desc={svc.full.desc} />
-          <ServiceCard icon="drop" title={svc.self.title} desc={svc.self.desc} />
-          <ServiceCard icon="wand" title={svc.detail.title} desc={svc.detail.desc} />
+          <ServiceCard icon="sparkle" title={svc.full?.title || ""} desc={svc.full?.desc || ""} />
+          <ServiceCard icon="drop" title={svc.self?.title || ""} desc={svc.self?.desc || ""} />
+          <ServiceCard icon="wand" title={svc.detail?.title || ""} desc={svc.detail?.desc || ""} />
         </div>
       </Section>
 
       {/* PRICING */}
       <Section title={t("pricing.title")} subtitle={t("pricing.subtitle")} className="bg-white">
         <div className="grid gap-6 lg:grid-cols-3">
-          <Plan {...plans.self} />
-          <Plan {...plans.express} featured />
-          <Plan {...plans.premium} />
+          <Plan {...(plans.self || { features: [] })} />
+          <Plan {...(plans.express || { features: [] })} featured />
+          <Plan {...(plans.premium || { features: [] })} />
         </div>
       </Section>
 
       {/* WHY */}
       <Section title={t("why.title")} subtitle={t("why.subtitle")}> 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <WhyCard icon="clock" title={why.open.title} desc={why.open.desc} />
-          <WhyCard icon="drop" title={why.eco.title} desc={why.eco.desc} />
-          <WhyCard icon="badge" title={why.staff.title} desc={why.staff.desc} />
-          <WhyCard icon="shield" title={why.guarantee.title} desc={why.guarantee.desc} />
+          <WhyCard icon="clock" title={why.open?.title || ""} desc={why.open?.desc || ""} />
+          <WhyCard icon="drop" title={why.eco?.title || ""} desc={why.eco?.desc || ""} />
+          <WhyCard icon="badge" title={why.staff?.title || ""} desc={why.staff?.desc || ""} />
+          <WhyCard icon="shield" title={why.guarantee?.title || ""} desc={why.guarantee?.desc || ""} />
         </div>
       </Section>
 
