@@ -8,27 +8,18 @@ import { getEmployeeSession, loginEmployee } from "../lib/employeeAuth.js";
 const ROLE_OPTIONS = [
   {
     key: "customer",
-    eyebrow: "Customer Access",
-    title: "Book and manage wash appointments",
-    description: "Use your customer account to save bookings and stay in sync with your next visit.",
     demo: null,
     registerAllowed: true,
     action: "/",
   },
   {
     key: "employee",
-    eyebrow: "Employee Access",
-    title: "Open the staff workspace",
-    description: "Track bays, bookings, and customer follow-up from the employee dashboard.",
     demo: { email: "employee@sparklewash.com", password: "employee123" },
     registerAllowed: true,
     action: "/employee/dashboard",
   },
   {
     key: "admin",
-    eyebrow: "Admin Console",
-    title: "Secure operational control",
-    description: "Manage locations, testimonials, bookings, and messages from the admin area.",
     demo: { email: "admin@sparklewash.com", password: "admin123" },
     registerAllowed: false,
     action: "/admin/dashboard",
@@ -118,13 +109,15 @@ export default function Login() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <section className="max-w-xl">
             <div className="inline-flex rounded-full border border-sky-300/15 bg-slate-950/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-200">
-              Unified Access
+              {t("auth.access.badge", { defaultValue: "Unified Access" })}
             </div>
             <h1 className="mt-6 text-4xl font-black tracking-tight text-white md:text-6xl">
-              One login flow for customers, employees, and admins.
+              {t("auth.access.title", { defaultValue: "One login flow for customers, employees, and admins." })}
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-300">
-              Choose your role, sign in with the right account, and we will send you to the matching workspace.
+              {t("auth.access.subtitle", {
+                defaultValue: "Choose your role, sign in with the right account, and we will send you to the matching workspace.",
+              })}
             </p>
 
             <div className="mt-8 grid gap-4">
@@ -141,10 +134,14 @@ export default function Login() {
                   }
                 >
                   <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-200">
-                    {option.eyebrow}
+                    {t(`auth.roles.${option.key}.eyebrow`, { defaultValue: option.key })}
                   </div>
-                  <div className="mt-2 text-xl font-extrabold text-white">{option.title}</div>
-                  <div className="mt-2 text-sm leading-6 text-slate-300">{option.description}</div>
+                  <div className="mt-2 text-xl font-extrabold text-white">
+                    {t(`auth.roles.${option.key}.title`)}
+                  </div>
+                  <div className="mt-2 text-sm leading-6 text-slate-300">
+                    {t(`auth.roles.${option.key}.description`)}
+                  </div>
                 </button>
               ))}
             </div>
@@ -210,7 +207,7 @@ export default function Login() {
             {roleConfig.demo && (
               <div className="mt-6 rounded-2xl border border-sky-300/10 bg-sky-400/5 p-4 text-sm text-slate-300">
                 <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-sky-200">
-                  Demo Credentials
+                  {t("auth.demoCredentials", { defaultValue: "Demo Credentials" })}
                 </div>
                 <div className="mt-3">{roleConfig.demo.email}</div>
                 <div>{roleConfig.demo.password}</div>
@@ -224,7 +221,7 @@ export default function Login() {
                   {t("auth.login.register", { defaultValue: "Register here" })}
                 </Link>
               ) : (
-                <span>Admin accounts are managed internally.</span>
+                <span>{t("auth.adminManaged", { defaultValue: "Admin accounts are managed internally." })}</span>
               )}
 
               <Link className="text-slate-400 hover:text-white" to="/">

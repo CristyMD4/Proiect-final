@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { logoutEmployee, requireEmployee } from "../lib/employeeAuth.js";
 
 const EMPLOYEE_STYLES = `
@@ -109,6 +110,7 @@ const EMPLOYEE_STYLES = `
 `;
 
 export default function EmployeeLayout() {
+  const { t } = useTranslation();
   const nav = useNavigate();
   const loc = useLocation();
 
@@ -127,27 +129,29 @@ export default function EmployeeLayout() {
             Sparkle<span>Wash</span>
           </div>
           <div className="sw-employee-caption">
-            Internal workspace for staff operations, appointments, and customer support follow-up.
+            {t("employee.caption", {
+              defaultValue: "Internal workspace for staff operations, appointments, and customer support follow-up.",
+            })}
           </div>
 
-          <div className="sw-employee-section">Workspace</div>
+          <div className="sw-employee-section">{t("employee.workspace", { defaultValue: "Workspace" })}</div>
           <Link
             to="/employee/dashboard"
             className={"sw-employee-link" + (loc.pathname === "/employee/dashboard" ? " active" : "")}
           >
-            Staff Dashboard
+            {t("employee.dashboardLink", { defaultValue: "Staff Dashboard" })}
           </Link>
         </aside>
 
         <main className="sw-employee-main">
           <div className="sw-employee-topbar">
             <div>
-              <h1>Employee Portal</h1>
-              <p>Shift-ready tools for bookings, wash bays, and customer handoff notes.</p>
+              <h1>{t("employee.title", { defaultValue: "Employee Portal" })}</h1>
+              <p>{t("employee.subtitle", { defaultValue: "Shift-ready tools for bookings, wash bays, and customer handoff notes." })}</p>
             </div>
             <div className="sw-employee-actions">
               <Link className="sw-employee-btn" to="/">
-                View Site
+                {t("employee.viewSite", { defaultValue: "View Site" })}
               </Link>
               <button
                 className="sw-employee-btn"
@@ -157,7 +161,7 @@ export default function EmployeeLayout() {
                   nav("/login?role=employee", { replace: true });
                 }}
               >
-                Log Out
+                {t("employee.logout", { defaultValue: "Log Out" })}
               </button>
             </div>
           </div>

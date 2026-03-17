@@ -75,7 +75,14 @@
   },
   "footer": { "tagline": "Serviciu de spălare și detailing de încredere din 2010.", "quickLinks": "Linkuri rapide", "followUs": "Urmărește-ne", "services": "Servicii", "rights": "Toate drepturile rezervate." },
   "auth": {
+    "access": {
+      "badge": "Acces Unificat",
+      "title": "Un singur flux de autentificare pentru clienți, angajați și administratori.",
+      "subtitle": "Alege rolul, autentifică-te cu contul potrivit și te trimitem în spațiul corespunzător."
+    },
     "backToSite": "Înapoi la site",
+    "demoCredentials": "Credențiale demo",
+    "adminManaged": "Conturile de admin sunt gestionate intern.",
     "fields": {
       "name": "Nume complet",
       "email": "Email",
@@ -94,9 +101,44 @@
       "register": "Înregistrează-te aici"
     },
     "register": {
+      "chooseType": "Alege tipul de cont",
       "loading": "Se creează contul...",
       "hasAccount": "Ai deja cont?",
       "login": "Autentifică-te"
+    },
+    "roles": {
+      "customer": {
+        "eyebrow": "Acces Client",
+        "title": "Programează și gestionează vizitele",
+        "description": "Folosește contul de client pentru programări rapide și acces la vizitele viitoare."
+      },
+      "employee": {
+        "eyebrow": "Acces Angajat",
+        "title": "Deschide spațiul de lucru al echipei",
+        "description": "Gestionează boxele, programările și urmărirea clienților din dashboard-ul angajaților."
+      },
+      "admin": {
+        "eyebrow": "Consolă Admin",
+        "title": "Control operațional securizat",
+        "description": "Gestionează locațiile, testimonialele, programările și mesajele din zona de administrare."
+      }
+    },
+    "registerRoles": {
+      "customer": {
+        "eyebrow": "Înregistrare Client",
+        "title": "Creează un cont de client",
+        "description": "Salvează programările mai rapid și păstrează istoricul vizitelor într-un singur loc."
+      },
+      "employee": {
+        "eyebrow": "Înregistrare Angajat",
+        "title": "Creează un cont de angajat",
+        "description": "Configurează autentificarea pentru note de tură, programări și operațiuni zilnice."
+      }
+    },
+    "registerAdmin": {
+      "title": "Conturi Admin",
+      "description": "Înregistrarea admin este dezactivată aici. Folosește pagina de login și alege rolul de admin.",
+      "link": "Deschide login admin"
     },
     "errors": {
       "emailExists": "Există deja un cont cu acest email.",
@@ -119,6 +161,31 @@
     "support": "Ai nevoie de ajutor?",
     "supportDesc": "Contactează-ne din pagina de contact și menționează emailul acestui cont.",
     "logout": "Deconectare"
+  },
+  "employee": {
+    "caption": "Spațiu intern pentru operațiunile echipei, programări și urmărirea mesajelor clienților.",
+    "workspace": "Spațiu de lucru",
+    "dashboardLink": "Dashboard Angajați",
+    "title": "Portal Angajat",
+    "subtitle": "Instrumente pregătite pentru tură, programări, boxe și notițe pentru clienți.",
+    "viewSite": "Vezi site-ul",
+    "logout": "Ieșire",
+    "signedIn": "Autentificat",
+    "fallbackName": "Angajat",
+    "checklist": "Checklist Tură",
+    "stats": {
+      "bookings": "Programări Azi",
+      "bookingsNote": "4 sosiri în următoarea oră",
+      "bays": "Boxe Libere",
+      "baysNote": "2 full-service, 1 detailing",
+      "messages": "Mesaje",
+      "messagesNote": "2 necesită apel înapoi"
+    },
+    "tasks": {
+      "one": "Confirmă programarea de detailing premium de la 10:30 pentru Elena T.",
+      "two": "Reumple detergentul eco în boxa self-service 2.",
+      "three": "Verifică două mesaje de la clienți care așteaptă actualizare."
+    }
   },
   "admin": {
     "title": "Panou Admin",

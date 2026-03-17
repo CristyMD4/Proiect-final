@@ -7,18 +7,10 @@ import { getEmployeeSession, registerEmployee } from "../lib/employeeAuth.js";
 const ROLE_OPTIONS = [
   {
     key: "customer",
-    eyebrow: "Customer Registration",
-    title: "Create a customer account",
-    description: "Save bookings faster and keep your visit history in one place.",
-    submitText: "Create customer account",
     redirectTo: "/",
   },
   {
     key: "employee",
-    eyebrow: "Employee Registration",
-    title: "Create a staff account",
-    description: "Set up a staff login for shift notes, bookings, and daily operations.",
-    submitText: "Create employee account",
     redirectTo: "/employee/dashboard",
   },
 ];
@@ -137,7 +129,7 @@ export default function Register() {
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <section className="rounded-[30px] border border-white/10 bg-slate-950/70 p-7 shadow-2xl shadow-sky-950/20 backdrop-blur-xl md:p-9">
             <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-200">
-              Choose Account Type
+              {t("auth.register.chooseType", { defaultValue: "Choose Account Type" })}
             </div>
             <div className="mt-6 grid gap-4">
               {ROLE_OPTIONS.map((option) => (
@@ -153,23 +145,25 @@ export default function Register() {
                   }
                 >
                   <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-200">
-                    {option.eyebrow}
+                    {t(`auth.registerRoles.${option.key}.eyebrow`)}
                   </div>
-                  <div className="mt-2 text-xl font-extrabold text-white">{option.title}</div>
-                  <div className="mt-2 text-sm leading-6 text-slate-300">{option.description}</div>
+                  <div className="mt-2 text-xl font-extrabold text-white">{t(`auth.registerRoles.${option.key}.title`)}</div>
+                  <div className="mt-2 text-sm leading-6 text-slate-300">{t(`auth.registerRoles.${option.key}.description`)}</div>
                 </button>
               ))}
             </div>
 
             <div className="mt-6 rounded-[24px] border border-amber-300/15 bg-amber-400/8 p-5 text-sm leading-6 text-amber-50">
               <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-amber-200">
-                Admin Accounts
+                {t("auth.registerAdmin.title", { defaultValue: "Admin Accounts" })}
               </div>
               <div className="mt-2">
-                Admin registration is disabled here. Use the login page and choose the admin role.
+                {t("auth.registerAdmin.description", {
+                  defaultValue: "Admin registration is disabled here. Use the login page and choose the admin role.",
+                })}
               </div>
               <Link className="mt-4 inline-block text-amber-200 hover:text-white" to="/login?role=admin">
-                Open admin login
+                {t("auth.registerAdmin.link", { defaultValue: "Open admin login" })}
               </Link>
             </div>
           </section>

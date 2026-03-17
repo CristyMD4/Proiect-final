@@ -132,7 +132,14 @@
     "rights": "All rights reserved."
   },
   "auth": {
+    "access": {
+      "badge": "Unified Access",
+      "title": "One login flow for customers, employees, and admins.",
+      "subtitle": "Choose your role, sign in with the right account, and we will send you to the matching workspace."
+    },
     "backToSite": "Back to site",
+    "demoCredentials": "Demo Credentials",
+    "adminManaged": "Admin accounts are managed internally.",
     "fields": {
       "name": "Full name",
       "email": "Email",
@@ -151,9 +158,44 @@
       "register": "Register here"
     },
     "register": {
+      "chooseType": "Choose Account Type",
       "loading": "Creating account...",
       "hasAccount": "Already have an account?",
       "login": "Sign in"
+    },
+    "roles": {
+      "customer": {
+        "eyebrow": "Customer Access",
+        "title": "Book and manage wash appointments",
+        "description": "Use your customer account to save bookings and stay in sync with your next visit."
+      },
+      "employee": {
+        "eyebrow": "Employee Access",
+        "title": "Open the staff workspace",
+        "description": "Track bays, bookings, and customer follow-up from the employee dashboard."
+      },
+      "admin": {
+        "eyebrow": "Admin Console",
+        "title": "Secure operational control",
+        "description": "Manage locations, testimonials, bookings, and messages from the admin area."
+      }
+    },
+    "registerRoles": {
+      "customer": {
+        "eyebrow": "Customer Registration",
+        "title": "Create a customer account",
+        "description": "Save bookings faster and keep your visit history in one place."
+      },
+      "employee": {
+        "eyebrow": "Employee Registration",
+        "title": "Create a staff account",
+        "description": "Set up a staff login for shift notes, bookings, and daily operations."
+      }
+    },
+    "registerAdmin": {
+      "title": "Admin Accounts",
+      "description": "Admin registration is disabled here. Use the login page and choose the admin role.",
+      "link": "Open admin login"
     },
     "errors": {
       "emailExists": "An account with this email already exists.",
@@ -176,6 +218,31 @@
     "support": "Need support?",
     "supportDesc": "Reach out through the contact page and mention the email on this account.",
     "logout": "Log out"
+  },
+  "employee": {
+    "caption": "Internal workspace for staff operations, appointments, and customer support follow-up.",
+    "workspace": "Workspace",
+    "dashboardLink": "Staff Dashboard",
+    "title": "Employee Portal",
+    "subtitle": "Shift-ready tools for bookings, wash bays, and customer handoff notes.",
+    "viewSite": "View Site",
+    "logout": "Log Out",
+    "signedIn": "Signed In",
+    "fallbackName": "Employee",
+    "checklist": "Shift Checklist",
+    "stats": {
+      "bookings": "Today Bookings",
+      "bookingsNote": "4 arrivals in the next hour",
+      "bays": "Open Bays",
+      "baysNote": "2 full-service, 1 detailing",
+      "messages": "Messages",
+      "messagesNote": "2 require callback"
+    },
+    "tasks": {
+      "one": "Confirm 10:30 premium detail booking for Elena T.",
+      "two": "Refill eco detergent in self-service bay 2.",
+      "three": "Review two customer messages waiting for a status update."
+    }
   },
   "admin": {
     "title": "Admin Panel",
