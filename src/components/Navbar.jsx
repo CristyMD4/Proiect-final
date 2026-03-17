@@ -62,6 +62,14 @@ export default function Navbar() {
             <span className="text-sm font-semibold">(555) 123-4567</span>
           </div>
 
+          <Link
+            to={accountTarget}
+            aria-label={accountLabel}
+            className="inline-flex sm:hidden h-11 w-11 items-center justify-center rounded-xl border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 transition"
+          >
+            <Icon name="user" className="w-5 h-5" />
+          </Link>
+
           <Link to={accountTarget} className="hidden sm:inline-flex btn btn-outline h-11 px-5">
             {accountLabel}
           </Link>
