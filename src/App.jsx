@@ -15,8 +15,6 @@ import AdminDashboard from "./admin/Dashboard.jsx";
 import AdminLocations from "./admin/Locations.jsx";
 import AdminMessages from "./admin/Messages.jsx";
 import AdminTestimonials from "./admin/Testimonials.jsx";
-import EmployeeLayout from "./employee/EmployeeLayout.jsx";
-import EmployeeDashboard from "./employee/Dashboard.jsx";
 
 function App() {
   return (
@@ -38,9 +36,6 @@ function App() {
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="messages" element={<AdminMessages />} />
         <Route path="testimonials" element={<AdminTestimonials />} />
-      </Route>
-      <Route path="/employee" element={<EmployeeLayout />}>
-        <Route path="dashboard" element={<EmployeeDashboard />} />
       </Route>
    </Routes> 
   )
