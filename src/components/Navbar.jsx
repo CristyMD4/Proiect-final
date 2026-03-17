@@ -3,9 +3,6 @@ import { NavLink, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitch from "./LanguageSwitch.jsx";
 import { Icon } from "./Icons.jsx";
-import { getClientSession } from "../lib/clientAuth.js";
-import { getEmployeeSession } from "../lib/employeeAuth.js";
-import { getAdminSession } from "../lib/adminAuth.js";
 
 const NavItem = ({ to, children }) => (
   <NavLink
@@ -21,23 +18,6 @@ const NavItem = ({ to, children }) => (
 
 export default function Navbar() {
   const { t } = useTranslation();
-  const clientSession = getClientSession();
-  const employeeSession = getEmployeeSession();
-  const adminSession = getAdminSession();
-  const accountTarget = adminSession
-    ? "/admin/dashboard"
-    : employeeSession
-      ? "/employee/dashboard"
-      : clientSession
-        ? "/"
-        : "/login";
-  const accountLabel = adminSession
-    ? "Admin"
-    : employeeSession
-      ? "Employee"
-      : clientSession
-        ? "My Account"
-        : "Sign In";
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-100">
@@ -61,10 +41,6 @@ export default function Navbar() {
             <Icon name="phone" className="w-4 h-4" />
             <span className="text-sm font-semibold">(555) 123-4567</span>
           </div>
-
-          <Link to={accountTarget} className="hidden sm:inline-flex btn btn-outline h-11 px-5">
-            {accountLabel}
-          </Link>
 
           <Link to="/book" className="btn btn-primary h-11 px-6">
             {t("common.bookNow")}
