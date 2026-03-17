@@ -29,7 +29,7 @@ export default function Navbar() {
     : employeeSession
       ? "/employee/dashboard"
       : clientSession
-        ? "/"
+        ? "/account"
         : "/login";
   const accountLabel = adminSession
     ? "Admin"

@@ -7,6 +7,7 @@ import Pricing from './pages/Pricing'
 import Services from './pages/Services'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Account from './pages/Account'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import SiteLayout from "./layouts/SiteLayout.jsx";
@@ -26,6 +27,7 @@ function App() {
         <Route path="/contact" element={<Contact />}/>
         <Route path="/gallery" element={<Gallery />}/>
         <Route path="/" element={<Home />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
         <Route path="/login" element={<Login />} />
