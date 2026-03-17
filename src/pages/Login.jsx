@@ -21,7 +21,7 @@ const ROLE_OPTIONS = [
     title: "Open the staff workspace",
     description: "Track bays, bookings, and customer follow-up from the employee dashboard.",
     demo: { email: "employee@sparklewash.com", password: "employee123" },
-    registerAllowed: false,
+    registerAllowed: true,
     action: "/",
   },
   {
