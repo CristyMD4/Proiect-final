@@ -125,10 +125,12 @@ export default function Home() {
   const why = t("why.items", { returnObjects: true }) || {};
   const testimonials = t("testimonials.cards", { returnObjects: true }) || [];
 
-  const featuredProducts = React.useMemo(
-    () => listProducts().filter((p) => p.badge === "Best Seller").slice(0, 4),
-    []
-  );
+  const featuredProducts = React.useMemo(() => {
+    const all = listProducts();
+    const badged = all.filter((p) => p.badge);
+    const rest = all.filter((p) => !p.badge);
+    return [...badged, ...rest].slice(0, 4);
+  }, []);
 
   const handleAdd = (id) => {
     addToCart(id);
