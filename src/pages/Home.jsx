@@ -183,7 +183,7 @@ export default function Home() {
 
       {/* PRICING */}
       <Section title={t("pricing.title")} subtitle={t("pricing.subtitle")} className="bg-white">
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <Plan {...(plans.self || { features: [] })} />
           <Plan {...(plans.express || { features: [] })} featured />
           <Plan {...(plans.premium || { features: [] })} />
@@ -209,7 +209,7 @@ export default function Home() {
 
       {/* WHY */}
       <Section title={t("why.title")} subtitle={t("why.subtitle")}>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           <WhyCard icon="clock" title={why.open?.title || ""} desc={why.open?.desc || ""} />
           <WhyCard icon="drop" title={why.eco?.title || ""} desc={why.eco?.desc || ""} />
           <WhyCard icon="badge" title={why.staff?.title || ""} desc={why.staff?.desc || ""} />

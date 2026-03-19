@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "Главная", "services": "Услуги", "pricing": "Цены", "gallery": "Галерея", "contact": "Контакты" },
+  "nav": { "home": "Главная", "services": "Услуги", "pricing": "Цены", "gallery": "Галерея", "contact": "Контакты", "shop": "Магазин" },
   "common": { "bookNow": "Записаться", "ourServices": "Наши услуги", "ourService": "Наша услуга", "getStarted": "Начать" },
   "hero": {
     "title": "Премиальная мойка &\nдетейлинг",

@@ -33,72 +33,45 @@ export default function Cart() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Cart items */}
         <div className="flex-1 space-y-4">
-          {cartItems.map((item) => (
-            <div key={item.id} className="card p-5 flex items-center gap-4">
-              {/* Thumbnail */}
-              <div className="h-16 w-16 flex-shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center text-2xl">
-                {{
-                  "foam-shampoo": "🧴",
-                  "pre-wash-spray": "💦",
-                  "wheel-cleaner": "⚙️",
-                  "wash-mitt": "🧤",
-                  "microfiber-set": "🪢",
-                  "snow-foam-lance": "❄️",
-                  "bucket-set": "🪣",
-                  "drying-aid": "💧",
-                  "car-wax": "✨",
-                  "quick-detailer": "🌟",
-                  "leather-conditioner": "🛋️",
-                  "interior-dressing": "🖤",
-                  "glass-cleaner": "🪟",
-                  "paint-sealant": "🛡️",
-                  "tire-dressing": "🔘",
-                  "air-freshener": "🌸",
-                  "clay-bar": "🧱",
-                }[item.id] || "🚗"}
+          {cartItems.map((item) => {
+            const EMOJI = {
+              "foam-shampoo":"🧴","pre-wash-spray":"💦","wheel-cleaner":"⚙️",
+              "wash-mitt":"🧤","microfiber-set":"🪢","snow-foam-lance":"❄️",
+              "bucket-set":"🪣","drying-aid":"💧","car-wax":"✨",
+              "quick-detailer":"🌟","leather-conditioner":"🛋️","interior-dressing":"🖤",
+              "glass-cleaner":"🪟","paint-sealant":"🛡️","tire-dressing":"🔘",
+              "air-freshener":"🌸","clay-bar":"🧱",
+            };
+            return (
+              <div key={item.id} className="card p-4 sm:p-5">
+                {/* Row 1: thumbnail + info + remove */}
+                <div className="flex items-start gap-3">
+                  <div className="h-14 w-14 flex-shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center text-2xl">
+                    {EMOJI[item.id] || "🚗"}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-extrabold text-slate-900 truncate">{item.name}</div>
+                    <div className="text-xs text-slate-400">{item.category}</div>
+                    <div className="text-[var(--sw-blue)] font-bold text-sm mt-0.5">${item.price.toFixed(2)} each</div>
+                  </div>
+                  <button
+                    onClick={() => removeFromCart(item.id)}
+                    className="flex-shrink-0 h-8 w-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition text-lg"
+                    aria-label="Remove item"
+                  >×</button>
+                </div>
+                {/* Row 2: qty + subtotal */}
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                  <div className="flex items-center gap-0 border border-slate-200 rounded-xl overflow-hidden">
+                    <button onClick={() => updateQty(item.id, item.quantity - 1)} className="px-3 py-2 text-slate-700 hover:bg-slate-50 transition font-bold">−</button>
+                    <span className="px-3 py-2 font-bold text-slate-900 border-l border-r border-slate-200 min-w-[2.5rem] text-center">{item.quantity}</span>
+                    <button onClick={() => updateQty(item.id, item.quantity + 1)} className="px-3 py-2 text-slate-700 hover:bg-slate-50 transition font-bold">+</button>
+                  </div>
+                  <div className="font-black text-slate-900 text-base">${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
               </div>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="font-extrabold text-slate-900 truncate">{item.name}</div>
-                <div className="text-sm text-slate-400">{item.category}</div>
-                <div className="text-[var(--sw-blue)] font-bold mt-0.5">${item.price.toFixed(2)} each</div>
-              </div>
-
-              {/* Qty selector */}
-              <div className="flex items-center gap-0 border border-slate-200 rounded-xl overflow-hidden flex-shrink-0">
-                <button
-                  onClick={() => updateQty(item.id, item.quantity - 1)}
-                  className="px-3 py-2 text-slate-700 hover:bg-slate-50 transition font-bold"
-                >
-                  −
-                </button>
-                <span className="px-3 py-2 font-bold text-slate-900 border-l border-r border-slate-200 min-w-[2.5rem] text-center">
-                  {item.quantity}
-                </span>
-                <button
-                  onClick={() => updateQty(item.id, item.quantity + 1)}
-                  className="px-3 py-2 text-slate-700 hover:bg-slate-50 transition font-bold"
-                >
-                  +
-                </button>
-              </div>
-
-              {/* Subtotal */}
-              <div className="w-20 text-right font-black text-slate-900 flex-shrink-0">
-                ${(item.price * item.quantity).toFixed(2)}
-              </div>
-
-              {/* Remove */}
-              <button
-                onClick={() => removeFromCart(item.id)}
-                className="flex-shrink-0 h-8 w-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition text-lg"
-                aria-label="Remove item"
-              >
-                ×
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Summary panel */}

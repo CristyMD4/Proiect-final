@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#0b1220] text-slate-200 mt-16">
       <div className="container-page py-14">
-        <div className="grid gap-10 md:grid-cols-4">
+        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <div className="text-2xl font-extrabold text-[var(--sw-blue)]">SparkleWash</div>
             <p className="mt-4 text-slate-300 text-sm leading-6">{t("footer.tagline")}</p>

@@ -89,9 +89,9 @@ export default function ShopProduct() {
         ← Back to Shop
       </Link>
 
-      <div className="grid md:grid-cols-2 gap-10 mb-14">
+      <div className="flex flex-col md:flex-row gap-10 mb-14">
         {/* Image placeholder */}
-        <div className="h-64 md:h-full min-h-64 rounded-2xl bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
+        <div className="w-full md:w-80 md:flex-shrink-0 h-64 md:h-80 rounded-2xl bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
           <span className="text-8xl">{PRODUCT_EMOJI[product.id] || "🚗"}</span>
         </div>
 
@@ -156,7 +156,7 @@ export default function ShopProduct() {
       {related.length > 0 && (
         <div>
           <h2 className="text-2xl font-extrabold text-slate-900 mb-6">You might also like</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {related.map((p) => (
               <Link
                 key={p.id}

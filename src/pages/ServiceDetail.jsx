@@ -143,7 +143,7 @@ export default function ServiceDetail() {
           <Link to="/services" className="inline-flex items-center gap-2 text-sm text-[var(--sw-blue)] hover:underline mb-6">
             ← Back to Services
           </Link>
-          <div className="flex items-start gap-5">
+          <div className="flex flex-col sm:flex-row items-start gap-5">
             <div className="h-16 w-16 rounded-2xl bg-white shadow-md text-[var(--sw-blue)] flex items-center justify-center flex-shrink-0">
               <Icon name={svc.icon} className="w-8 h-8" />
             </div>
@@ -192,7 +192,7 @@ export default function ServiceDetail() {
 
       {/* How It Works */}
       <Section title="How It Works" className="bg-slate-50">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {svc.steps.map((step, i) => (
             <div key={step.title} className="card p-6 text-center">
               <div className="mx-auto h-12 w-12 rounded-full bg-blue-50 text-[var(--sw-blue)] flex items-center justify-center mb-4">

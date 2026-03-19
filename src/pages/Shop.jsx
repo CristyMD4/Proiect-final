@@ -90,7 +90,7 @@ export default function Shop() {
       : allProducts.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="container-page py-14">
+    <div className="container-page py-8 md:py-14">
       {/* Header */}
       <div className="text-center mb-10">
         <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-semibold text-[var(--sw-blue)] mb-4">
@@ -121,7 +121,7 @@ export default function Shop() {
       </div>
 
       {/* Product grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {filtered.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}

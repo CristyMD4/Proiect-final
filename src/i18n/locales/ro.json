@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "Acasă", "services": "Servicii", "pricing": "Prețuri", "gallery": "Galerie", "contact": "Contact" },
+  "nav": { "home": "Acasă", "services": "Servicii", "pricing": "Prețuri", "gallery": "Galerie", "contact": "Contact", "shop": "Magazin" },
   "common": { "bookNow": "Programează-te", "ourServices": "Serviciile noastre", "ourService": "Serviciul nostru", "getStarted": "Începe" },
   "hero": {
     "title": "Spălare Auto Premium &\nDetailing",

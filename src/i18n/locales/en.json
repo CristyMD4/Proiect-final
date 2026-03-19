@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "Home", "services": "Services", "pricing": "Pricing", "gallery": "Gallery", "contact": "Contact" },
+  "nav": { "home": "Home", "services": "Services", "pricing": "Pricing", "gallery": "Gallery", "contact": "Contact", "shop": "Shop" },
   "common": { "bookNow": "Book Now", "ourServices": "Our Services", "ourService": "Our Service", "getStarted": "Get Started" },
   "hero": {
     "title": "Premium Car Wash &\nDetailing",
