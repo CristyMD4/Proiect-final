@@ -25,8 +25,12 @@ export default function Book() {
         locationId: z.string().min(1, "Select a location"),
         service: z.string().min(1, t("errors.service", { defaultValue: "Select a service" })),
         date: z.string().min(1, t("errors.date", { defaultValue: "Select a date" })),
-        time: z.string().min(1, t("errors.time", { defaultValue: "Select a time" })),
+        time: z.string().optional(),
         notes: z.string().optional(),
+      }).superRefine((data, ctx) => {
+        if (data.service !== "Self-Service" && !data.time) {
+          ctx.addIssue({ path: ["time"], code: "custom", message: t("errors.time", { defaultValue: "Select a time" }) });
+        }
       }),
     [t]
   );
@@ -34,6 +38,7 @@ export default function Book() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
     reset,
   } = useForm({
@@ -50,6 +55,9 @@ export default function Book() {
       notes: "",
     },
   });
+
+  const selectedService = watch("service");
+  const isSelfService = selectedService === "Self-Service";
 
   const FieldError = ({ name }) =>
     errors?.[name]?.message ? (
@@ -177,20 +185,22 @@ export default function Book() {
               </div>
             </div>
 
-            <div>
-              <label className="text-sm font-semibold text-slate-700">{t("book.fields.time")}</label>
-              <select
-                className="mt-2 h-12 w-full rounded-xl border border-slate-200 px-4 outline-none focus:border-slate-300 focus:ring-4 focus:ring-slate-100"
-                {...register("time")}
-              >
-                {timeOpts.map((x, i) => (
-                  <option key={i} value={i === 0 ? "" : x}>
-                    {x}
-                  </option>
-                ))}
-              </select>
-              <FieldError name="time" />
-            </div>
+            {!isSelfService && (
+              <div>
+                <label className="text-sm font-semibold text-slate-700">{t("book.fields.time")}</label>
+                <select
+                  className="mt-2 h-12 w-full rounded-xl border border-slate-200 px-4 outline-none focus:border-slate-300 focus:ring-4 focus:ring-slate-100"
+                  {...register("time")}
+                >
+                  {timeOpts.map((x, i) => (
+                    <option key={i} value={i === 0 ? "" : x}>
+                      {x}
+                    </option>
+                  ))}
+                </select>
+                <FieldError name="time" />
+              </div>
+            )}
 
             <div>
               <label className="text-sm font-semibold text-slate-700">{t("book.notes")}</label>
