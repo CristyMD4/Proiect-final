@@ -27,10 +27,10 @@ export default function Footer() {
           <div>
             <div className="font-semibold">{t("footer.services")}</div>
             <div className="mt-4 flex flex-col gap-2 text-sm text-slate-300">
-              <Link className="hover:text-white" to="/services#full-service">Full-Service Wash</Link>
-              <Link className="hover:text-white" to="/services#self-service">Self-Service Wash</Link>
-              <Link className="hover:text-white" to="/services#premium-detailing">Premium Detailing</Link>
-              <Link className="hover:text-white" to="/services#interior-cleaning">Interior Cleaning</Link>
+              <Link className="hover:text-white" to="/services/full-service">Full-Service Wash</Link>
+              <Link className="hover:text-white" to="/services/self-service">Self-Service Wash</Link>
+              <Link className="hover:text-white" to="/services/premium-detailing">Premium Detailing</Link>
+              <Link className="hover:text-white" to="/services/interior-cleaning">Interior Cleaning</Link>
             </div>
           </div>
 

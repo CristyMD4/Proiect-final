@@ -8,6 +8,7 @@ import Services from './pages/Services'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Account from './pages/Account'
+import ServiceDetail from './pages/ServiceDetail'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import SiteLayout from "./layouts/SiteLayout.jsx";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/services/:slug" element={<ServiceDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
