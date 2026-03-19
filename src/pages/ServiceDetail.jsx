@@ -218,17 +218,19 @@ export default function ServiceDetail() {
         </div>
       </Section>
 
-      {/* CTA */}
-      <section className="py-16 bg-[var(--sw-blue)]">
-        <div className="container-page text-center">
-          <h2 className="text-3xl font-black text-white">Ready to book?</h2>
-          <p className="mt-3 text-blue-100">Schedule your {svc.title} appointment in minutes.</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link to="/book" className="btn bg-white text-[var(--sw-blue)] hover:bg-blue-50 font-bold px-8">Book Now</Link>
-            <Link to="/contact" className="btn border border-white/40 text-white hover:bg-white/10 px-8">Contact Us</Link>
+      {/* CTA — ascuns pentru self-service (nu se fac programări) */}
+      {slug !== "self-service" && (
+        <section className="py-16 bg-[var(--sw-blue)]">
+          <div className="container-page text-center">
+            <h2 className="text-3xl font-black text-white">Ready to book?</h2>
+            <p className="mt-3 text-blue-100">Schedule your {svc.title} appointment in minutes.</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link to="/book" className="btn bg-white text-[var(--sw-blue)] hover:bg-blue-50 font-bold px-8">Book Now</Link>
+              <Link to="/contact" className="btn border border-white/40 text-white hover:bg-white/10 px-8">Contact Us</Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }
