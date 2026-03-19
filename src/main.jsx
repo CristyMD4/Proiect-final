@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import './i18n/i18n.js'
+import { restoreReminders } from './lib/notifications.js'
+
+restoreReminders()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -1,7 +1,8 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import Section from "../components/Section.jsx";
 import { addBooking, listLocations, uid, seedIfEmpty } from "../lib/storage.js";
+import { requestPermission, notifyBookingConfirmed, scheduleReminder } from "../lib/notifications.js";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -50,10 +51,12 @@ export default function Book() {
       <p className="mt-1 text-sm text-rose-600">{String(errors[name].message)}</p>
     ) : null;
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     seedIfEmpty();
+    const id = uid("BKG");
+
     addBooking({
-      id: uid("BKG"),
+      id,
       name: data.fullName,
       email: data.email,
       phone: data.phone,
@@ -66,7 +69,25 @@ export default function Book() {
       status: "pending",
       at: Date.now(),
     });
-    alert("Booking submitted (demo). Open /admin/bookings to manage.");
+
+    // Notificări browser
+    await requestPermission();
+    notifyBookingConfirmed({
+      name: data.fullName,
+      phone: data.phone,
+      service: data.service,
+      date: data.date,
+      time: data.time,
+    });
+    scheduleReminder({
+      id,
+      name: data.fullName,
+      phone: data.phone,
+      service: data.service,
+      date: data.date,
+      time: data.time,
+    });
+
     reset();
   };
 
