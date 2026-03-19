@@ -9,6 +9,10 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Account from './pages/Account'
 import ServiceDetail from './pages/ServiceDetail'
+import Shop from './pages/Shop'
+import ShopProduct from './pages/ShopProduct'
+import Cart from './pages/Cart'
+import { CartProvider } from './context/CartContext'
 
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import SiteLayout from "./layouts/SiteLayout.jsx";
@@ -22,6 +26,7 @@ import EmployeeDashboard from "./employee/Dashboard.jsx";
 
 function App() {
   return (
+   <CartProvider>
    <Routes>
       <Route element={<SiteLayout/>}>
         <Route path="/book" element={<Book />}/>
@@ -34,6 +39,9 @@ function App() {
         <Route path="/services/:slug" element={<ServiceDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/:id" element={<ShopProduct />} />
+        <Route path="/cart" element={<Cart />} />
       </Route>
       <Route path="/admin/login" element={<Navigate to="/login?role=admin" replace />} />
       <Route path="/admin" element={<AdminLayout />}>
@@ -46,7 +54,8 @@ function App() {
       <Route path="/employee" element={<EmployeeLayout />}>
         <Route path="dashboard" element={<EmployeeDashboard />} />
       </Route>
-   </Routes> 
+   </Routes>
+   </CartProvider>
   )
 }
 

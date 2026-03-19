@@ -6,6 +6,7 @@ import { Icon } from "./Icons.jsx";
 import { getClientSession } from "../lib/clientAuth.js";
 import { getEmployeeSession } from "../lib/employeeAuth.js";
 import { getAdminSession } from "../lib/adminAuth.js";
+import { useCart } from "../context/CartContext.jsx";
 
 const NavItem = ({ to, children }) => (
   <NavLink
@@ -21,6 +22,7 @@ const NavItem = ({ to, children }) => (
 
 export default function Navbar() {
   const { t } = useTranslation();
+  const { cartCount } = useCart();
   const clientSession = getClientSession();
   const employeeSession = getEmployeeSession();
   const adminSession = getAdminSession();
@@ -51,10 +53,19 @@ export default function Navbar() {
           <NavItem to="/services">{t("nav.services")}</NavItem>
           <NavItem to="/pricing">{t("nav.pricing")}</NavItem>
           <NavItem to="/gallery">{t("nav.gallery")}</NavItem>
+          <NavItem to="/shop">Shop</NavItem>
           <NavItem to="/contact">{t("nav.contact")}</NavItem>
         </nav>
 
         <div className="flex items-center gap-3">
+          <Link to="/cart" className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 text-slate-700 hover:border-slate-300 transition">
+            <Icon name="cart" className="w-5 h-5" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[var(--sw-blue)] text-white text-[10px] font-bold flex items-center justify-center">
+                {cartCount > 9 ? "9+" : cartCount}
+              </span>
+            )}
+          </Link>
           <LanguageSwitch className="ml-4"/>
 
           <div className="hidden sm:flex items-center gap-2 text-slate-700">

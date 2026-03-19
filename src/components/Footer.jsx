@@ -21,6 +21,7 @@ export default function Footer() {
               <Link className="hover:text-white" to="/services">{t("nav.services")}</Link>
               <Link className="hover:text-white" to="/pricing">{t("nav.pricing")}</Link>
               <Link className="hover:text-white" to="/contact">{t("nav.contact")}</Link>
+              <Link className="hover:text-white" to="/shop">Shop</Link>
             </div>
           </div>
 
