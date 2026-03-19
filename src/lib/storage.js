@@ -74,7 +74,7 @@ export function seedIfEmpty() {
         id: "loc_1",
         name: "Location 1",
         address: "",
-        features: { selfWashBoxes: 4, carWashLanes: 0, hasStore: false },
+        features: { selfWashBoxes: 4, carWashLanes: 0, hasStore: false, parkingSpots: 8 },
         storeItems: [],
         at: Date.now(),
       },
@@ -82,7 +82,7 @@ export function seedIfEmpty() {
         id: "loc_2",
         name: "Location 2",
         address: "",
-        features: { selfWashBoxes: 6, carWashLanes: 2, hasStore: false },
+        features: { selfWashBoxes: 6, carWashLanes: 2, hasStore: false, parkingSpots: 12 },
         storeItems: [],
         at: Date.now(),
       },
@@ -90,7 +90,7 @@ export function seedIfEmpty() {
         id: "loc_3",
         name: "Location 3",
         address: "",
-        features: { selfWashBoxes: 6, carWashLanes: 0, hasStore: true },
+        features: { selfWashBoxes: 6, carWashLanes: 0, hasStore: true, parkingSpots: 10 },
         storeItems: [
           {
             id: uid("SKU"),
@@ -206,6 +206,14 @@ export function addBooking(booking) {
   items.unshift(b);
   write(KEYS.bookings, items);
   return b;
+}
+
+// ---------- Bookings by location + date ----------
+export function getBookingsForLocationDate(locationId, date) {
+  seedIfEmpty();
+  return read(KEYS.bookings, []).filter(
+    (b) => b.locationId === locationId && b.date === date && b.service === "Self-Service"
+  );
 }
 
 // ---------- Locations ----------
