@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import Section from "../components/Section.jsx";
 import BeforeAfterCarousel from "../components/BeforeAfterCarousel.jsx";
 import { Icon } from "../components/Icons.jsx";
+import { listProducts } from "../lib/shopStorage.js";
+import { useCart } from "../context/CartContext.jsx";
 
 function ServiceCard({ icon, title, desc }) {
   return (
@@ -46,6 +48,44 @@ function Plan({ name, tagline, price, unit, features, featured }) {
   );
 }
 
+const EMOJI_MAP = {
+  "foam-shampoo": "🧴", "pre-wash-spray": "💧", "wheel-cleaner": "🔵",
+  "wash-mitt": "🧤", "microfiber-set": "🪣", "snow-foam-lance": "❄️",
+  "bucket-set": "🪣", "drying-aid": "✨", "car-wax": "✨",
+  "quick-detailer": "🌟", "leather-conditioner": "🛋️", "interior-dressing": "🪟",
+  "glass-cleaner": "🪟", "paint-sealant": "🛡️", "tire-dressing": "⚫",
+  "air-freshener": "🌸", "clay-bar": "🔷",
+};
+
+function ShopPreviewCard({ product, onAdd, added }) {
+  return (
+    <div className="card p-5 flex flex-col">
+      <div className="h-32 rounded-xl bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center text-4xl mb-4">
+        {EMOJI_MAP[product.id] || "🧴"}
+      </div>
+      {product.badge && (
+        <span className={`self-start mb-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+          product.badge === "Best Seller" ? "bg-amber-100 text-amber-700" :
+          product.badge === "New" ? "bg-emerald-100 text-emerald-700" :
+          "bg-rose-100 text-rose-700"
+        }`}>{product.badge}</span>
+      )}
+      <div className="font-extrabold text-slate-900 text-sm leading-tight">{product.name}</div>
+      <div className="mt-1 text-[11px] text-slate-400">{product.category}</div>
+      <div className="mt-2 text-lg font-black text-[var(--sw-blue)]">${product.price.toFixed(2)}</div>
+      <p className="mt-2 text-xs text-slate-500 leading-5 flex-1 line-clamp-2">{product.description}</p>
+      <button
+        onClick={() => onAdd(product.id)}
+        className={`mt-4 h-9 w-full rounded-xl text-xs font-bold transition ${
+          added ? "bg-emerald-500 text-white" : "bg-[var(--sw-blue)] text-white hover:bg-blue-600"
+        }`}
+      >
+        {added ? "✓ Adăugat" : "Adaugă în coș"}
+      </button>
+    </div>
+  );
+}
+
 function WhyCard({ icon, title, desc }) {
   return (
     <div className="card p-7">
@@ -77,11 +117,24 @@ function Testimonial({ name, role, text }) {
 
 export default function Home() {
   const { t } = useTranslation();
+  const { addToCart } = useCart();
+  const [addedIds, setAddedIds] = React.useState({});
 
   const svc = t("services.cards", { returnObjects: true }) || {};
   const plans = t("pricing.plans", { returnObjects: true }) || {};
   const why = t("why.items", { returnObjects: true }) || {};
   const testimonials = t("testimonials.cards", { returnObjects: true }) || [];
+
+  const featuredProducts = React.useMemo(
+    () => listProducts().filter((p) => p.badge === "Best Seller").slice(0, 4),
+    []
+  );
+
+  const handleAdd = (id) => {
+    addToCart(id);
+    setAddedIds((prev) => ({ ...prev, [id]: true }));
+    setTimeout(() => setAddedIds((prev) => ({ ...prev, [id]: false })), 1500);
+  };
 
   return (
     <div>
@@ -135,13 +188,31 @@ export default function Home() {
         </div>
       </Section>
 
+      {/* SHOP PREVIEW */}
+      <Section title="Shop SparkleWash" subtitle="Produse profesionale de spălătorie și îngrijire auto — direct la tine acasă." className="bg-white">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {featuredProducts.map((p) => (
+            <ShopPreviewCard
+              key={p.id}
+              product={p}
+              onAdd={handleAdd}
+              added={!!addedIds[p.id]}
+            />
+          ))}
+        </div>
+        <div className="mt-8 flex justify-center">
+          <Link to="/shop" className="btn btn-primary px-10">Vezi toate produsele</Link>
+        </div>
+      </Section>
+
       {/* WHY */}
-      <Section title={t("why.title")} subtitle={t("why.subtitle")}> 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <Section title={t("why.title")} subtitle={t("why.subtitle")}>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
           <WhyCard icon="clock" title={why.open?.title || ""} desc={why.open?.desc || ""} />
           <WhyCard icon="drop" title={why.eco?.title || ""} desc={why.eco?.desc || ""} />
           <WhyCard icon="badge" title={why.staff?.title || ""} desc={why.staff?.desc || ""} />
           <WhyCard icon="shield" title={why.guarantee?.title || ""} desc={why.guarantee?.desc || ""} />
+          <WhyCard icon="cart" title="Online Shop" desc="Comandă produse profesionale de îngrijire auto direct din magazinul nostru online." />
         </div>
       </Section>
 
