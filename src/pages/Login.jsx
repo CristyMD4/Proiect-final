@@ -1,86 +1,47 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { loginClient, getClientSession } from "../lib/clientAuth.js";
 import { adminLogin, getAdminSession } from "../lib/adminAuth.js";
-import { getEmployeeSession, loginEmployee } from "../lib/employeeAuth.js";
+import { loginEmployee, getEmployeeSession } from "../lib/employeeAuth.js";
 
-const ROLE_OPTIONS = [
-  {
-    key: "customer",
-    demo: null,
-    registerAllowed: true,
-    action: "/",
-  },
-  {
-    key: "employee",
-    demo: { email: "employee@sparklewash.com", password: "employee123" },
-    registerAllowed: true,
-    action: "/employee/dashboard",
-  },
-  {
-    key: "admin",
-    demo: { email: "admin@sparklewash.com", password: "admin123" },
-    registerAllowed: false,
-    action: "/admin/dashboard",
-  },
-];
+function detectRoleAndLogin(email, password) {
+  // Try admin first
+  const adminResult = adminLogin(email, password);
+  if (adminResult.ok) return { ...adminResult, redirect: "/admin/dashboard" };
 
-function getRoleConfig(role) {
-  return ROLE_OPTIONS.find((option) => option.key === role) || ROLE_OPTIONS[0];
-}
+  // Try employee
+  const empResult = loginEmployee({ email, password });
+  if (empResult.ok) return { ...empResult, redirect: "/employee/dashboard" };
 
-function getSessionForRole(role) {
-  if (role === "admin") return getAdminSession();
-  if (role === "employee") return getEmployeeSession();
-  return getClientSession();
-}
+  // Try client
+  const clientResult = loginClient({ email, password });
+  if (clientResult.ok) return { ...clientResult, redirect: "/" };
 
-function loginByRole(role, credentials) {
-  if (role === "admin") return adminLogin(credentials.email, credentials.password);
-  if (role === "employee") return loginEmployee(credentials);
-  return loginClient(credentials);
+  return { ok: false, error: "auth.errors.invalidCredentials" };
 }
 
 export default function Login() {
   const { t } = useTranslation();
   const nav = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const initialRole = searchParams.get("role") || "customer";
 
-  const [role, setRole] = useState(initialRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const roleConfig = useMemo(() => getRoleConfig(role), [role]);
-
   useEffect(() => {
-    setRole(initialRole);
-  }, [initialRole]);
-
-  useEffect(() => {
-    const session = getSessionForRole(role);
-    if (session) {
-      nav(roleConfig.action, { replace: true });
-    }
-  }, [nav, role, roleConfig]);
-
-  const updateRole = (nextRole) => {
-    setRole(nextRole);
-    setErr("");
-    setEmail("");
-    setPassword("");
-    setSearchParams({ role: nextRole });
-  };
+    if (getAdminSession()) { nav("/admin/dashboard", { replace: true }); return; }
+    if (getEmployeeSession()) { nav("/employee/dashboard", { replace: true }); return; }
+    if (getClientSession()) { nav("/", { replace: true }); }
+  }, [nav]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErr("");
     setLoading(true);
 
-    const result = loginByRole(role, { email, password });
+    const result = detectRoleAndLogin(email, password);
 
     setLoading(false);
 
@@ -89,7 +50,7 @@ export default function Login() {
       return;
     }
 
-    nav(roleConfig.action, { replace: true });
+    nav(result.redirect, { replace: true });
   };
 
   return (
@@ -109,54 +70,22 @@ export default function Login() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <section className="max-w-xl">
             <div className="inline-flex rounded-full border border-sky-300/15 bg-slate-950/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-200">
-              {t("auth.access.badge", { defaultValue: "Unified Access" })}
+              {t("auth.access.badge", { defaultValue: "Secure Access" })}
             </div>
             <h1 className="mt-6 text-4xl font-black tracking-tight text-white md:text-6xl">
-              {t("auth.access.title", { defaultValue: "One login flow for customers, employees, and admins." })}
+              {t("auth.access.title", { defaultValue: "Welcome back to SparkleWash." })}
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-300">
               {t("auth.access.subtitle", {
-                defaultValue: "Choose your role, sign in with the right account, and we will send you to the matching workspace.",
+                defaultValue: "Sign in with your account and we will take you to the right place automatically.",
               })}
             </p>
-
-            <div className="mt-8 grid gap-4">
-              {ROLE_OPTIONS.map((option) => (
-                <button
-                  key={option.key}
-                  type="button"
-                  onClick={() => updateRole(option.key)}
-                  className={
-                    "rounded-[24px] border p-5 text-left transition " +
-                    (role === option.key
-                      ? "border-sky-300/40 bg-sky-400/10 shadow-[0_0_0_1px_rgba(56,189,248,0.2)]"
-                      : "border-white/10 bg-slate-950/30 hover:border-sky-300/20 hover:bg-white/5")
-                  }
-                >
-                  <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-200">
-                    {t(`auth.roles.${option.key}.eyebrow`, { defaultValue: option.key })}
-                  </div>
-                  <div className="mt-2 text-xl font-extrabold text-white">
-                    {t(`auth.roles.${option.key}.title`)}
-                  </div>
-                  <div className="mt-2 text-sm leading-6 text-slate-300">
-                    {t(`auth.roles.${option.key}.description`)}
-                  </div>
-                </button>
-              ))}
-            </div>
           </section>
 
           <section className="rounded-[30px] border border-white/10 bg-slate-950/70 p-7 shadow-2xl shadow-sky-950/20 backdrop-blur-xl md:p-9">
-            <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-200">
-              {roleConfig.eyebrow}
-            </div>
             <h2 className="mt-3 text-3xl font-black tracking-tight text-white">
               {t("auth.login.title", { defaultValue: "Sign in" })}
             </h2>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
-              {roleConfig.description}
-            </p>
 
             <form onSubmit={handleSubmit} className="mt-8 grid gap-4">
               <div>
@@ -204,25 +133,11 @@ export default function Login() {
               </button>
             </form>
 
-            {roleConfig.demo && (
-              <div className="mt-6 rounded-2xl border border-sky-300/10 bg-sky-400/5 p-4 text-sm text-slate-300">
-                <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-sky-200">
-                  {t("auth.demoCredentials", { defaultValue: "Demo Credentials" })}
-                </div>
-                <div className="mt-3">{roleConfig.demo.email}</div>
-                <div>{roleConfig.demo.password}</div>
-              </div>
-            )}
-
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-300">
-              {roleConfig.registerAllowed ? (
-                <Link className="text-sky-300 hover:text-sky-200" to={`/register?role=${role}`}>
-                  {t("auth.login.noAccount", { defaultValue: "Need an account?" })}{" "}
-                  {t("auth.login.register", { defaultValue: "Register here" })}
-                </Link>
-              ) : (
-                <span>{t("auth.adminManaged", { defaultValue: "Admin accounts are managed internally." })}</span>
-              )}
+              <Link className="text-sky-300 hover:text-sky-200" to="/register">
+                {t("auth.login.noAccount", { defaultValue: "Need an account?" })}{" "}
+                {t("auth.login.register", { defaultValue: "Register here" })}
+              </Link>
 
               <Link className="text-slate-400 hover:text-white" to="/">
                 {t("auth.backToSite", { defaultValue: "Back to site" })}
