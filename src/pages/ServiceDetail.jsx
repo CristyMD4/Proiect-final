@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import Section from "../components/Section.jsx";
 import { Icon } from "../components/Icons.jsx";
+import AvailabilityWidget from "../components/AvailabilityWidget.jsx";
 
 const SERVICES = {
   "full-service": {
@@ -165,6 +166,17 @@ export default function ServiceDetail() {
           </div>
         </div>
       </section>
+
+      {/* Disponibilitate în timp real — doar pentru self-service */}
+      {slug === "self-service" && (
+        <Section title="Disponibilitate în timp real">
+          <p className="text-center text-slate-500 text-sm -mt-6 mb-6">
+            Boxurile marcate cu <span className="font-semibold text-emerald-600">✓</span> sunt libere acum.
+            Se actualizează automat la 30 de secunde.
+          </p>
+          <AvailabilityWidget />
+        </Section>
+      )}
 
       {/* What's Included */}
       <Section title="What's Included">

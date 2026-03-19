@@ -69,7 +69,7 @@
     "fields": { "fullName": "Nume complet", "email": "Email", "phone": "Telefon", "vehicle": "Tip vehicul", "service": "Serviciu", "date": "Data preferată", "time": "Ora preferată" },
     "opts": {
       "vehicle": ["Alege tipul", "Sedan", "SUV", "Truck", "Van", "Mașină sport"],
-      "service": ["Alege un serviciu", "Self-Service", "Spălare Express", "Detail Premium", "Interior"],
+      "service": ["Alege un serviciu", "Spălare Express", "Detail Premium", "Interior"],
       "time": ["Alege ora", "9:00", "10:00", "11:00", "13:00", "14:00", "15:00"]
     }
   },

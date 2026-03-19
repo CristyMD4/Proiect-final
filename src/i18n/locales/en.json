@@ -120,7 +120,7 @@
     },
     "opts": {
       "vehicle": ["Select vehicle type", "Sedan", "SUV", "Truck", "Van", "Sports Car"],
-      "service": ["Choose a service", "Self-Service", "Express Wash", "Premium Detail", "Interior Only"],
+      "service": ["Choose a service", "Express Wash", "Premium Detail", "Interior Only"],
       "time": ["Select time", "9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "2:00 PM", "3:00 PM"]
     }
   },
