@@ -6,7 +6,7 @@ const BADGES = ["", "Best Seller", "New", "Sale"];
 
 const EMPTY_FORM = {
   name: "", category: "Wash Products", price: "",
-  description: "", badge: "", inStock: true,
+  quantity: "", description: "", badge: "", inStock: true,
 };
 
 function uid() {
@@ -49,7 +49,8 @@ export default function AdminShopProducts() {
   function openEdit(p) {
     setForm({
       name: p.name, category: p.category,
-      price: String(p.price), description: p.description || "",
+      price: String(p.price), quantity: String(p.quantity ?? ""),
+      description: p.description || "",
       badge: p.badge || "", inStock: p.inStock ?? true,
     });
     setModal({ mode: "edit", id: p.id });
@@ -60,6 +61,8 @@ export default function AdminShopProducts() {
     const price = parseFloat(form.price);
     if (isNaN(price) || price < 0) return;
 
+    const qty = form.quantity !== "" ? parseInt(form.quantity, 10) : undefined;
+
     if (modal.mode === "add") {
       const id = slugify(form.name) || uid();
       addProduct({
@@ -67,6 +70,7 @@ export default function AdminShopProducts() {
         name: form.name.trim(),
         category: form.category,
         price,
+        quantity: isNaN(qty) ? 0 : qty,
         description: form.description.trim(),
         badge: form.badge || undefined,
         inStock: form.inStock,
@@ -76,6 +80,7 @@ export default function AdminShopProducts() {
         name: form.name.trim(),
         category: form.category,
         price,
+        quantity: isNaN(qty) ? 0 : qty,
         description: form.description.trim(),
         badge: form.badge || undefined,
         inStock: form.inStock,
@@ -151,9 +156,11 @@ export default function AdminShopProducts() {
         <table className="sw-table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Product</th>
               <th>Category</th>
               <th>Price</th>
+              <th>Qty</th>
               <th>Badge</th>
               <th>Stock</th>
               <th>Actions</th>
@@ -161,19 +168,29 @@ export default function AdminShopProducts() {
           </thead>
           <tbody>
             {filtered.length === 0 && (
-              <tr><td colSpan={6} style={{ textAlign: "center", color: "#1e293b", padding: 32 }}>No products found</td></tr>
+              <tr><td colSpan={8} style={{ textAlign: "center", color: "#1e293b", padding: 32 }}>No products found</td></tr>
             )}
             {filtered.map((p) => (
               <tr key={p.id}>
                 <td>
+                  <span style={{ fontFamily: "monospace", fontSize: 11, color: "#334155", background: "rgba(34,211,238,0.05)", border: "1px solid rgba(34,211,238,0.1)", borderRadius: 5, padding: "2px 6px" }}>
+                    #{p.id}
+                  </span>
+                </td>
+                <td>
                   <strong>{p.name}</strong>
                   {p.description && (
-                    <div style={{ fontSize: 11, color: "#334155", marginTop: 2, maxWidth: 260 }}
+                    <div style={{ fontSize: 11, color: "#334155", marginTop: 2, maxWidth: 220 }}
                          className="line-clamp-1">{p.description}</div>
                   )}
                 </td>
                 <td>{p.category}</td>
                 <td><strong>${Number(p.price).toFixed(2)}</strong></td>
+                <td>
+                  <span style={{ color: (p.quantity ?? 0) <= 5 ? "#f87171" : (p.quantity ?? 0) <= 15 ? "#fbbf24" : "#34d399", fontWeight: 700 }}>
+                    {p.quantity ?? 0}
+                  </span>
+                </td>
                 <td>{p.badge ? <span className={badgeCls(p.badge)}>{p.badge}</span> : <span style={{ color: "#1e293b" }}>—</span>}</td>
                 <td>
                   <button
@@ -206,7 +223,7 @@ export default function AdminShopProducts() {
                 <label className="sw-form-label">Product Name *</label>
                 <input className="sw-input" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="e.g. Foam Shampoo" />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
                 <div>
                   <label className="sw-form-label">Category *</label>
                   <select className="sw-input" value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}>
@@ -216,6 +233,10 @@ export default function AdminShopProducts() {
                 <div>
                   <label className="sw-form-label">Price ($) *</label>
                   <input className="sw-input" type="number" min="0" step="0.01" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} placeholder="0.00" />
+                </div>
+                <div>
+                  <label className="sw-form-label">Quantity</label>
+                  <input className="sw-input" type="number" min="0" step="1" value={form.quantity} onChange={(e) => setForm((f) => ({ ...f, quantity: e.target.value }))} placeholder="0" />
                 </div>
               </div>
               <div>

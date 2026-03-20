@@ -56,15 +56,37 @@ function ProductCard({ product }) {
 
       {/* Info */}
       <div className="flex-1 flex flex-col">
-        <div className="text-xs text-slate-400 font-medium mb-1">{product.category}</div>
+        {/* ID + category row */}
+        <div className="flex items-center justify-between mb-1">
+          <div className="text-xs text-slate-400 font-medium">{product.category}</div>
+          <div className="text-[10px] font-mono text-slate-300 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5">
+            #{product.id}
+          </div>
+        </div>
+
         <div className="font-extrabold text-slate-900 leading-tight mb-1">{product.name}</div>
         <div className="text-xl font-black text-[var(--sw-blue)] mb-2">${product.price.toFixed(2)}</div>
-        <p className="text-sm text-slate-600 line-clamp-2 flex-1 mb-4">{product.description}</p>
+        <p className="text-sm text-slate-600 line-clamp-2 flex-1 mb-3">{product.description}</p>
+
+        {/* Quantity */}
+        <div className="flex items-center gap-1.5 mb-4">
+          <span className={`inline-block h-2 w-2 rounded-full ${
+            !product.inStock ? "bg-rose-400" : (product.quantity ?? 0) <= 10 ? "bg-amber-400" : "bg-emerald-400"
+          }`} />
+          <span className="text-xs text-slate-500">
+            {!product.inStock
+              ? "Out of stock"
+              : (product.quantity ?? 0) <= 0
+              ? "Out of stock"
+              : `${product.quantity} in stock`}
+          </span>
+        </div>
 
         <div className="flex items-center gap-2 mt-auto">
           <button
             onClick={handleAdd}
-            className={`btn flex-1 h-10 text-sm ${added ? "btn-outline text-emerald-700 border-emerald-300" : "btn-primary"}`}
+            disabled={!product.inStock || (product.quantity ?? 0) <= 0}
+            className={`btn flex-1 h-10 text-sm ${added ? "btn-outline text-emerald-700 border-emerald-300" : "btn-primary"} disabled:opacity-40 disabled:cursor-not-allowed`}
           >
             {added ? "✓ Added" : "Add to Cart"}
           </button>
