@@ -52,7 +52,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map(({ to, label, fallback }) => (
               <NavLink
                 key={to}
@@ -69,7 +69,9 @@ export default function Navbar() {
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
-            <LanguageSwitch />
+            <div className="hidden lg:block">
+              <LanguageSwitch />
+            </div>
 
             {/* Cart */}
             <Link
@@ -86,18 +88,18 @@ export default function Navbar() {
             </Link>
 
             {/* Account — desktop only */}
-            <Link to={accountTarget} className="hidden sm:inline-flex btn btn-outline h-10 px-4 text-sm">
+            <Link to={accountTarget} className="hidden lg:inline-flex btn btn-outline h-10 px-4 text-sm">
               {accountLabel}
             </Link>
 
             {/* Book — desktop only */}
-            <Link to="/book" className="hidden sm:inline-flex btn btn-primary h-10 px-5 text-sm">
+            <Link to="/book" className="hidden lg:inline-flex btn btn-primary h-10 px-5 text-sm">
               {t("common.bookNow")}
             </Link>
 
             {/* Burger — mobile only */}
             <button
-              className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-700"
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-700"
               onClick={() => setOpen((v) => !v)}
               aria-label="Menu"
             >
@@ -117,7 +119,7 @@ export default function Navbar() {
 
       {/* Mobile menu overlay */}
       {open && (
-        <div className="md:hidden fixed inset-0 top-[57px] z-40 bg-white border-t border-slate-100 overflow-y-auto">
+        <div className="lg:hidden fixed inset-0 top-[57px] z-40 bg-white border-t border-slate-100 overflow-y-auto">
           <div className="container-page py-6 flex flex-col gap-1">
             {NAV_LINKS.map(({ to, label, fallback }) => (
               <NavLink
@@ -134,6 +136,9 @@ export default function Navbar() {
             ))}
 
             <div className="mt-4 border-t border-slate-100 pt-4 grid gap-3">
+              <div className="flex justify-center">
+                <LanguageSwitch />
+              </div>
               <Link
                 to={accountTarget}
                 onClick={() => setOpen(false)}
