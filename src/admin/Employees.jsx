@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { listEmployees } from "../lib/employeeAuth.js";
+import { listEmployees, registerEmployee } from "../lib/employeeAuth.js";
 
 const STATUS_OPTIONS = [
   { value: "working", label: "Working", className: "sw-badge-confirmed" },
@@ -54,8 +54,16 @@ function buildDailySchedule(employee, selectedDate) {
 }
 
 export default function AdminEmployees() {
-  const [employees] = useState(() => listEmployees());
+  const [employees, setEmployees] = useState(() => listEmployees());
   const [selectedDate, setSelectedDate] = useState(() => formatDateValue(new Date()));
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+  const [formError, setFormError] = useState("");
+  const [formSuccess, setFormSuccess] = useState("");
 
   const employeeRows = useMemo(
     () =>
@@ -74,11 +82,114 @@ export default function AdminEmployees() {
     return { total: employeeRows.length, onShift, resting, late };
   }, [employeeRows]);
 
+  function setField(field, value) {
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  }
+
+  function handleCreateEmployee(event) {
+    event.preventDefault();
+    setFormError("");
+    setFormSuccess("");
+
+    if (!form.name.trim() || !form.email.trim() || !form.password.trim()) {
+      setFormError("Name, email, and password are required.");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setFormError("Password must be at least 6 characters.");
+      return;
+    }
+
+    const result = registerEmployee({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      password: form.password,
+    });
+
+    if (!result.ok) {
+      setFormError(result.error === "auth.errors.emailExists" ? "This employee email already exists." : result.error);
+      return;
+    }
+
+    setEmployees(listEmployees());
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+    });
+    setFormSuccess("Employee account created successfully.");
+  }
+
   return (
     <div>
       <div className="sw-page-header">
         <h1 className="sw-page-h1">Employees</h1>
         <p className="sw-page-sub">See every employee and the schedule for the selected day from the admin panel calendar.</p>
+      </div>
+
+      <div className="sw-card" style={{ padding: 22, marginBottom: 24 }}>
+        <div className="sw-section-title">Add Employee</div>
+        <form
+          onSubmit={handleCreateEmployee}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, minmax(0, 1fr)) auto",
+            gap: 10,
+            alignItems: "end",
+          }}
+        >
+          <div>
+            <label className="sw-form-label">Name</label>
+            <input
+              className="sw-input"
+              type="text"
+              value={form.name}
+              onChange={(event) => setField("name", event.target.value)}
+              placeholder="Employee name"
+            />
+          </div>
+          <div>
+            <label className="sw-form-label">Email</label>
+            <input
+              className="sw-input"
+              type="email"
+              value={form.email}
+              onChange={(event) => setField("email", event.target.value)}
+              placeholder="employee@example.com"
+            />
+          </div>
+          <div>
+            <label className="sw-form-label">Phone</label>
+            <input
+              className="sw-input"
+              type="tel"
+              value={form.phone}
+              onChange={(event) => setField("phone", event.target.value)}
+              placeholder="+373 600 00 000"
+            />
+          </div>
+          <div>
+            <label className="sw-form-label">Password</label>
+            <input
+              className="sw-input"
+              type="password"
+              value={form.password}
+              onChange={(event) => setField("password", event.target.value)}
+              placeholder="Minimum 6 characters"
+            />
+          </div>
+          <button type="submit" className="sw-btn sw-btn-primary">
+            Add Employee
+          </button>
+        </form>
+        {formError ? <div style={{ marginTop: 12, fontSize: 12, color: "#fca5a5" }}>{formError}</div> : null}
+        {formSuccess ? <div style={{ marginTop: 12, fontSize: 12, color: "#6ee7b7" }}>{formSuccess}</div> : null}
       </div>
 
       <div
