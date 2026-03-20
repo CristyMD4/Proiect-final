@@ -6,6 +6,7 @@ import { seedIfEmpty } from "../lib/storage.js";
 
 const NAV_ITEMS = [
   { to: "/admin/employees", label: "Employees", icon: "E" },
+  { to: "/admin/schedules", label: "Schedules", icon: "S" },
   { to: "/admin/dashboard", label: "Dashboard", icon: "⬡" },
   { to: "/admin/locations", label: "Locations", icon: "◈" },
   { to: "/admin/bookings", label: "Bookings", icon: "◧" },
