@@ -88,18 +88,40 @@ function ShopPreviewCard({ product, onAdd, added }) {
 
 function ShopPreviewSlider({ products, onAdd, addedIds }) {
   const trackRef = React.useRef(null);
-  const [active, setActive] = React.useState(0);
+  const [activePage, setActivePage] = React.useState(0);
+  const [itemsPerView, setItemsPerView] = React.useState(1);
 
-  const scrollToIndex = (index) => {
+  React.useEffect(() => {
+    const syncItemsPerView = () => {
+      if (window.innerWidth >= 1024) {
+        setItemsPerView(4);
+        return;
+      }
+      if (window.innerWidth >= 640) {
+        setItemsPerView(2);
+        return;
+      }
+      setItemsPerView(1);
+    };
+
+    syncItemsPerView();
+    window.addEventListener("resize", syncItemsPerView);
+    return () => window.removeEventListener("resize", syncItemsPerView);
+  }, []);
+
+  const totalPages = Math.ceil(products.length / itemsPerView);
+
+  const scrollToPage = (page) => {
     const track = trackRef.current;
     if (!track) return;
 
-    const nextIndex = Math.max(0, Math.min(index, products.length - 1));
+    const nextPage = Math.max(0, Math.min(page, totalPages - 1));
+    const nextIndex = nextPage * itemsPerView;
     const card = track.children[nextIndex];
     if (!card) return;
 
     card.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-    setActive(nextIndex);
+    setActivePage(nextPage);
   };
 
   const handleScroll = () => {
@@ -117,7 +139,7 @@ function ShopPreviewSlider({ products, onAdd, addedIds }) {
       { index: 0, distance: Number.POSITIVE_INFINITY }
     ).index;
 
-    setActive(closestIndex);
+    setActivePage(Math.floor(closestIndex / itemsPerView));
   };
 
   return (
@@ -127,7 +149,7 @@ function ShopPreviewSlider({ products, onAdd, addedIds }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => scrollToIndex(active - 1)}
+            onClick={() => scrollToPage(activePage - 1)}
             className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
             aria-label="Previous products"
           >
@@ -135,7 +157,7 @@ function ShopPreviewSlider({ products, onAdd, addedIds }) {
           </button>
           <button
             type="button"
-            onClick={() => scrollToIndex(active + 1)}
+            onClick={() => scrollToPage(activePage + 1)}
             className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
             aria-label="Next products"
           >
@@ -158,16 +180,16 @@ function ShopPreviewSlider({ products, onAdd, addedIds }) {
       </div>
 
       <div className="mt-5 flex justify-center gap-2">
-        {products.map((product, index) => (
+        {Array.from({ length: totalPages }).map((_, index) => (
           <button
-            key={product.id}
+            key={index}
             type="button"
-            onClick={() => scrollToIndex(index)}
+            onClick={() => scrollToPage(index)}
             className={
               "h-2.5 rounded-full transition " +
-              (index === active ? "w-8 bg-[var(--sw-blue)]" : "w-2.5 bg-slate-300 hover:bg-slate-400")
+              (index === activePage ? "w-8 bg-[var(--sw-blue)]" : "w-2.5 bg-slate-300 hover:bg-slate-400")
             }
-            aria-label={`Go to product ${index + 1}`}
+            aria-label={`Go to product page ${index + 1}`}
           />
         ))}
       </div>
@@ -218,7 +240,7 @@ export default function Home() {
     const all = listProducts();
     const badged = all.filter((p) => p.badge);
     const rest = all.filter((p) => !p.badge);
-    return [...badged, ...rest].slice(0, 4);
+    return [...badged, ...rest].slice(0, 8);
   }, []);
 
   const handleAdd = (id) => {
