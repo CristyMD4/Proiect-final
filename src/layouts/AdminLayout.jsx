@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: "/admin/bookings", label: "Bookings", icon: "◧" },
   { to: "/admin/messages", label: "Messages", icon: "◫" },
   { to: "/admin/testimonials", label: "Testimonials", icon: "◩" },
+  { to: "/admin/shop",        label: "Shop Products", icon: "🛒" },
 ];
 
 const ADMIN_STYLES = `

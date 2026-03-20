@@ -23,6 +23,7 @@ import AdminLocations from "./admin/Locations.jsx";
 import AdminMessages from "./admin/Messages.jsx";
 import AdminSchedulePlanner from "./admin/SchedulePlanner.jsx";
 import AdminTestimonials from "./admin/Testimonials.jsx";
+import AdminShopProducts from "./admin/ShopProducts.jsx";
 import EmployeeLayout from "./employee/EmployeeLayout.jsx";
 import EmployeeDashboard from "./employee/Dashboard.jsx";
 
@@ -54,6 +55,7 @@ function App() {
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="messages" element={<AdminMessages />} />
         <Route path="testimonials" element={<AdminTestimonials />} />
+        <Route path="shop" element={<AdminShopProducts />} />
       </Route>
       <Route path="/employee" element={<EmployeeLayout />}>
         <Route path="dashboard" element={<EmployeeDashboard />} />
