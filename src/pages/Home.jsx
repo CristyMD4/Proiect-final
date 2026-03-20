@@ -59,7 +59,7 @@ const EMOJI_MAP = {
 
 function ShopPreviewCard({ product, onAdd, added }) {
   return (
-    <div className="card p-5 flex flex-col">
+    <div className="card flex h-full flex-col p-5">
       <div className="h-32 rounded-xl bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center text-4xl mb-4">
         {EMOJI_MAP[product.id] || "🧴"}
       </div>
@@ -82,6 +82,95 @@ function ShopPreviewCard({ product, onAdd, added }) {
       >
         {added ? "✓ Adăugat" : "Adaugă în coș"}
       </button>
+    </div>
+  );
+}
+
+function ShopPreviewSlider({ products, onAdd, addedIds }) {
+  const trackRef = React.useRef(null);
+  const [active, setActive] = React.useState(0);
+
+  const scrollToIndex = (index) => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const nextIndex = Math.max(0, Math.min(index, products.length - 1));
+    const card = track.children[nextIndex];
+    if (!card) return;
+
+    card.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+    setActive(nextIndex);
+  };
+
+  const handleScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const cards = Array.from(track.children);
+    if (!cards.length) return;
+
+    const closestIndex = cards.reduce(
+      (best, card, index) => {
+        const distance = Math.abs(card.offsetLeft - track.scrollLeft);
+        return distance < best.distance ? { index, distance } : best;
+      },
+      { index: 0, distance: Number.POSITIVE_INFINITY }
+    ).index;
+
+    setActive(closestIndex);
+  };
+
+  return (
+    <div>
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <div className="text-sm font-semibold text-slate-500">Featured Store Picks</div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => scrollToIndex(active - 1)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            aria-label="Previous products"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToIndex(active + 1)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            aria-label="Next products"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      <div
+        ref={trackRef}
+        onScroll={handleScroll}
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 [scrollbar-width:none] [-ms-overflow-style:none]"
+        style={{ scrollbarWidth: "none" }}
+      >
+        {products.map((p) => (
+          <div key={p.id} className="min-w-[85%] snap-start sm:min-w-[48%] lg:min-w-[31%]">
+            <ShopPreviewCard product={p} onAdd={onAdd} added={!!addedIds[p.id]} />
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5 flex justify-center gap-2">
+        {products.map((product, index) => (
+          <button
+            key={product.id}
+            type="button"
+            onClick={() => scrollToIndex(index)}
+            className={
+              "h-2.5 rounded-full transition " +
+              (index === active ? "w-8 bg-[var(--sw-blue)]" : "w-2.5 bg-slate-300 hover:bg-slate-400")
+            }
+            aria-label={`Go to product ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -192,16 +281,7 @@ export default function Home() {
 
       {/* SHOP PREVIEW */}
       <Section title="Shop SparkleWash" subtitle="Produse profesionale de spălătorie și îngrijire auto — direct la tine acasă." className="bg-white">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredProducts.map((p) => (
-            <ShopPreviewCard
-              key={p.id}
-              product={p}
-              onAdd={handleAdd}
-              added={!!addedIds[p.id]}
-            />
-          ))}
-        </div>
+        <ShopPreviewSlider products={featuredProducts} onAdd={handleAdd} addedIds={addedIds} />
         <div className="mt-8 flex justify-center">
           <Link to="/shop" className="btn btn-primary px-10">Vezi toate produsele</Link>
         </div>
