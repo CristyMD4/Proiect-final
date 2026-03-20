@@ -1,6 +1,11 @@
 const EMPLOYEE_USERS_KEY = "sw_employees_v1";
 const EMPLOYEE_SESSION_KEY = "sw_employee_session_v1";
 const VALID_EMPLOYEE_STATUSES = ["working", "resting", "late"];
+const DEFAULT_SCHEDULE = {
+  days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+  start: "09:00",
+  end: "17:00",
+};
 
 const DEMO_EMPLOYEES = [
   {
@@ -11,6 +16,7 @@ const DEMO_EMPLOYEES = [
     password: "employee123",
     role: "employee",
     status: "working",
+    schedule: DEFAULT_SCHEDULE,
     createdAt: Date.now(),
     updatedAt: Date.now(),
   },
@@ -18,10 +24,19 @@ const DEMO_EMPLOYEES = [
 
 function normalizeEmployee(user) {
   const status = VALID_EMPLOYEE_STATUSES.includes(user?.status) ? user.status : "resting";
+  const days = Array.isArray(user?.schedule?.days) && user.schedule.days.length > 0
+    ? user.schedule.days
+    : DEFAULT_SCHEDULE.days;
+  const schedule = {
+    days,
+    start: user?.schedule?.start || DEFAULT_SCHEDULE.start,
+    end: user?.schedule?.end || DEFAULT_SCHEDULE.end,
+  };
 
   return {
     ...user,
     status,
+    schedule,
     createdAt: user?.createdAt || Date.now(),
     updatedAt: user?.updatedAt || user?.createdAt || Date.now(),
   };
@@ -80,6 +95,7 @@ export function registerEmployee({ name, email, phone, password }) {
     password,
     role: "employee",
     status: "resting",
+    schedule: DEFAULT_SCHEDULE,
     createdAt: Date.now(),
     updatedAt: Date.now(),
   };
@@ -133,6 +149,29 @@ export function updateEmployeeStatus(employeeId, status) {
   const nextUsers = users.map((user) =>
     user.id === employeeId
       ? { ...user, status, updatedAt: Date.now() }
+      : user
+  );
+
+  const employee = nextUsers.find((user) => user.id === employeeId);
+  if (!employee) {
+    return { ok: false, error: "Employee not found." };
+  }
+
+  writeEmployees(nextUsers);
+  return { ok: true, employee };
+}
+
+export function updateEmployeeSchedule(employeeId, schedule) {
+  const normalizedSchedule = {
+    days: Array.isArray(schedule?.days) && schedule.days.length > 0 ? schedule.days : DEFAULT_SCHEDULE.days,
+    start: schedule?.start || DEFAULT_SCHEDULE.start,
+    end: schedule?.end || DEFAULT_SCHEDULE.end,
+  };
+
+  const users = readEmployees();
+  const nextUsers = users.map((user) =>
+    user.id === employeeId
+      ? { ...user, schedule: normalizedSchedule, updatedAt: Date.now() }
       : user
   );
 
