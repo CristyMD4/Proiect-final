@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { adminLogout, requireAdmin } from "../lib/adminAuth.js";
 import { seedIfEmpty } from "../lib/storage.js";
 
@@ -280,7 +279,6 @@ const ADMIN_STYLES = `
 export default function AdminLayout() {
   const nav = useNavigate();
   const loc = useLocation();
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (!requireAdmin()) nav("/admin/login", { replace: true });
