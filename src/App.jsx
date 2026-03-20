@@ -18,6 +18,7 @@ import AdminLayout from "./layouts/AdminLayout.jsx";
 import SiteLayout from "./layouts/SiteLayout.jsx";
 import AdminBookings from "./admin/Bookings.jsx";
 import AdminDashboard from "./admin/Dashboard.jsx";
+import AdminEmployees from "./admin/Employees.jsx";
 import AdminLocations from "./admin/Locations.jsx";
 import AdminMessages from "./admin/Messages.jsx";
 import AdminTestimonials from "./admin/Testimonials.jsx";
@@ -46,6 +47,7 @@ function App() {
       <Route path="/admin/login" element={<Navigate to="/login?role=admin" replace />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="employees" element={<AdminEmployees />} />
         <Route path="locations" element={<AdminLocations />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="messages" element={<AdminMessages />} />

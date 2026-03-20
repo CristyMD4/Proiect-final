@@ -5,6 +5,7 @@ import { adminLogout, requireAdmin } from "../lib/adminAuth.js";
 import { seedIfEmpty } from "../lib/storage.js";
 
 const NAV_ITEMS = [
+  { to: "/admin/employees", label: "Employees", icon: "E" },
   { to: "/admin/dashboard", label: "Dashboard", icon: "⬡" },
   { to: "/admin/locations", label: "Locations", icon: "◈" },
   { to: "/admin/bookings", label: "Bookings", icon: "◧" },
