@@ -151,7 +151,7 @@ function ShopPreviewSlider({ products, onAdd, addedIds }) {
         style={{ scrollbarWidth: "none" }}
       >
         {products.map((p) => (
-          <div key={p.id} className="min-w-[85%] snap-start sm:min-w-[48%] lg:min-w-[31%]">
+          <div key={p.id} className="min-w-[85%] snap-start sm:min-w-[48%] lg:min-w-[24%]">
             <ShopPreviewCard product={p} onAdd={onAdd} added={!!addedIds[p.id]} />
           </div>
         ))}
