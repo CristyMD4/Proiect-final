@@ -1,9 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getBookingsForLocationDate, listLocations } from "../lib/storage.js";
-
-function today() {
-  return new Date().toISOString().slice(0, 10);
-}
+import { listLocations } from "../lib/storage.js";
 
 function BoxGrid({ total, occupiedSet, label }) {
   const free = total - occupiedSet.size;
@@ -80,19 +76,36 @@ export default function AvailabilityWidget() {
     const locs = listLocations();
     setLocations(locs);
 
-    const date = today();
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const seed = hour * 60 + minute; // changes every minute
     const next = {};
     locs.forEach((loc) => {
-      const bookings = getBookingsForLocationDate(loc.id, date);
-      const occupiedBoxes = new Set(
-        bookings.map((b) => Number(b.box)).filter((n) => n > 0)
+      const locSeed = loc.id.charCodeAt(loc.id.length - 1);
+      const totalBoxes   = loc.features?.selfWashBoxes || 4;
+      const totalParking = loc.features?.parkingSpots  || 8;
+
+      // Simulate occupied boxes (self-wash = walk-in only, no bookings)
+      const occupiedBoxCount = Math.min(
+        Math.floor(Math.abs(Math.sin(seed * 0.07 + locSeed)) * (totalBoxes + 1)),
+        totalBoxes
       );
-      // Simulare parcări ocupate bazată pe ora curentă (variază în timp)
-      const hour = new Date().getHours();
-      const totalParking = loc.features?.parkingSpots || 8;
+      const occupiedBoxes = new Set();
+      // Deterministic shuffle based on seed
+      let s = seed ^ locSeed;
+      const slots = Array.from({ length: totalBoxes }, (_, i) => i + 1);
+      for (let i = slots.length - 1; i > 0; i--) {
+        s = (s * 1103515245 + 12345) & 0x7fffffff;
+        const j = s % (i + 1);
+        [slots[i], slots[j]] = [slots[j], slots[i]];
+      }
+      slots.slice(0, occupiedBoxCount).forEach((n) => occupiedBoxes.add(n));
+
+      // Simulate occupied parking spots
       const occupiedParking = Math.min(
-        Math.floor((Math.sin(hour + loc.id.charCodeAt(loc.id.length - 1)) + 1) * (totalParking / 4)),
-        totalParking - 1
+        Math.floor(Math.abs(Math.sin(seed * 0.05 + locSeed + 1)) * (totalParking + 1)),
+        totalParking
       );
       next[loc.id] = { occupiedBoxes, occupiedParking };
     });
