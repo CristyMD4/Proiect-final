@@ -120,6 +120,10 @@ export default function EmployeeLayout() {
     }
   }, [nav]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [loc.pathname, loc.search]);
+
   return (
     <div className="sw-employee-root">
       <style>{EMPLOYEE_STYLES}</style>

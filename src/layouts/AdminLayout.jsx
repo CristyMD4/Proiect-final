@@ -287,6 +287,10 @@ export default function AdminLayout() {
     seedIfEmpty();
   }, [nav]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [loc.pathname, loc.search]);
+
   const pageLabel =
     NAV_ITEMS.find((n) => loc.pathname.startsWith(n.to))?.label || "Admin";
 
