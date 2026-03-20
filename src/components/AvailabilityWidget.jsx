@@ -114,7 +114,9 @@ export default function AvailabilityWidget() {
       {locations.map((loc) => {
         const totalBoxes   = loc.features?.selfWashBoxes || 4;
         const totalParking = loc.features?.parkingSpots  || 8;
-        const { occupiedBoxes = new Set(), occupiedParking = 0 } = data[loc.id] || {};
+        const locData = data[loc.id] || {};
+        const occupiedBoxes = locData.occupiedBoxes ?? new Set();
+        const occupiedParking = locData.occupiedParking ?? 0;
 
         return (
           <div key={loc.id} className="card p-6 flex flex-col gap-5">
