@@ -71,10 +71,10 @@ async function postAuth(path, payload) {
   }
 }
 
-export function registerClient({ name, password }) {
+export function registerClient({ name, email, password }) {
   return postAuth("register", {
     fullName: name,
-    email: arguments[0].email,
+    email,
     password,
   });
 }

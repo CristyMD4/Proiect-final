@@ -18,7 +18,9 @@ async function detectRoleAndLogin(email, password) {
   const clientResult = await loginClient({ email, password });
   if (clientResult.ok) return { ...clientResult, redirect: "/" };
 
-  return { ok: false, error: "auth.errors.invalidCredentials" };
+  return clientResult.error === "auth.errors.invalidCredentials"
+    ? { ok: false, error: "auth.errors.invalidCredentials" }
+    : clientResult;
 }
 
 export default function Login() {

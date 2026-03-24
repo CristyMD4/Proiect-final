@@ -170,13 +170,15 @@ export default function Register() {
 
           <section className="max-w-2xl">
             <div className="inline-flex rounded-full border border-sky-300/15 bg-slate-950/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-200">
-              {roleConfig.eyebrow}
+              {t(`auth.registerRoles.${role}.eyebrow`, { defaultValue: role })}
             </div>
             <h1 className="mt-6 text-4xl font-black tracking-tight text-white md:text-5xl">
-              {roleConfig.title}
+              {t(`auth.registerRoles.${role}.title`, { defaultValue: "Create account" })}
             </h1>
             <p className="mt-4 text-lg leading-8 text-slate-300">
-              {roleConfig.description}
+              {t(`auth.registerRoles.${role}.description`, {
+                defaultValue: "Create your account to continue.",
+              })}
             </p>
 
             <form onSubmit={handleSubmit} className="mt-8 grid gap-4 rounded-[30px] border border-white/10 bg-slate-950/60 p-7 backdrop-blur-xl md:grid-cols-2 md:p-9">
@@ -280,7 +282,7 @@ export default function Register() {
               >
                 {loading
                   ? t("auth.register.loading", { defaultValue: "Creating account..." })
-                  : roleConfig.submitText}
+                  : t(`auth.registerRoles.${role}.submitText`, { defaultValue: "Create account" })}
               </button>
             </form>
 
