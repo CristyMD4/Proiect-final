@@ -5,7 +5,7 @@ import { loginClient, getClientSession } from "../lib/clientAuth.js";
 import { adminLogin, getAdminSession } from "../lib/adminAuth.js";
 import { loginEmployee, getEmployeeSession } from "../lib/employeeAuth.js";
 
-function detectRoleAndLogin(email, password) {
+async function detectRoleAndLogin(email, password) {
   // Try admin first
   const adminResult = adminLogin(email, password);
   if (adminResult.ok) return { ...adminResult, redirect: "/admin/dashboard" };
@@ -15,7 +15,7 @@ function detectRoleAndLogin(email, password) {
   if (empResult.ok) return { ...empResult, redirect: "/employee/dashboard" };
 
   // Try client
-  const clientResult = loginClient({ email, password });
+  const clientResult = await loginClient({ email, password });
   if (clientResult.ok) return { ...clientResult, redirect: "/" };
 
   return { ok: false, error: "auth.errors.invalidCredentials" };
@@ -36,13 +36,12 @@ export default function Login() {
     if (getClientSession()) { nav("/", { replace: true }); }
   }, [nav]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
     setLoading(true);
 
-    const result = detectRoleAndLogin(email, password);
-
+    const result = await detectRoleAndLogin(email, password);
     setLoading(false);
 
     if (!result.ok) {

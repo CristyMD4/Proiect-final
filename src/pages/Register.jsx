@@ -24,7 +24,7 @@ function getSessionForRole(role) {
 }
 
 function registerByRole(role, payload) {
-  return role === "employee" ? registerEmployee(payload) : registerClient(payload);
+  return role === "employee" ? Promise.resolve(registerEmployee(payload)) : registerClient(payload);
 }
 
 function getPasswordStrength(password) {
@@ -81,7 +81,7 @@ export default function Register() {
     setForm((current) => ({ ...current, [field]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
 
@@ -96,7 +96,7 @@ export default function Register() {
     }
 
     setLoading(true);
-    const result = registerByRole(role, {
+    const result = await registerByRole(role, {
       name: form.name,
       email: form.email,
       phone: form.phone,

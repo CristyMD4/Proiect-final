@@ -1,55 +1,89 @@
-const USERS_KEY = "sw_clients_v1";
 const SESSION_KEY = "sw_client_session_v1";
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "https://localhost:7031").replace(/\/+$/, "");
 
-function readUsers() {
-  try {
-    const raw = localStorage.getItem(USERS_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-export function registerClient({ name, email, phone, password }) {
-  const users = readUsers();
-
-  if (users.find((u) => u.email === email)) {
-    return { ok: false, error: "auth.errors.emailExists" };
-  }
-
-  const user = {
-    id: `USR_${Date.now()}_${Math.random().toString(16).slice(2)}`,
-    name,
-    email,
-    phone: phone || "",
-    password,
-    createdAt: Date.now(),
+function saveSession(authResponse) {
+  const session = {
+    id: authResponse.email,
+    name: authResponse.fullName,
+    email: authResponse.email,
+    role: authResponse.role || "client",
+    token: authResponse.token,
+    loggedInAt: Date.now(),
   };
 
-  users.push(user);
-  writeUsers(users);
-
-  const session = { id: user.id, name: user.name, email: user.email };
   localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  return session;
+}
 
-  return { ok: true, user };
+async function parseApiResponse(response) {
+  const contentType = response.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    return response.json();
+  }
+
+  const text = await response.text();
+  return text || null;
+}
+
+function normalizeError(error) {
+  if (typeof error !== "string") {
+    return "Unable to connect to the server.";
+  }
+
+  if (error === "User already exists.") {
+    return "auth.errors.emailExists";
+  }
+
+  if (error === "Invalid email or password.") {
+    return "auth.errors.invalidCredentials";
+  }
+
+  return error;
+}
+
+async function postAuth(path, payload) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/Auth/${path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await parseApiResponse(response);
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: normalizeError(data),
+      };
+    }
+
+    const session = saveSession(data);
+    return { ok: true, user: session, session };
+  } catch {
+    return {
+      ok: false,
+      error: "Unable to connect to the server.",
+    };
+  }
+}
+
+export function registerClient({ name, password }) {
+  return postAuth("register", {
+    fullName: name,
+    email: arguments[0].email,
+    password,
+  });
 }
 
 export function loginClient({ email, password }) {
-  const users = readUsers();
-  const user = users.find((u) => u.email === email && u.password === password);
-
-  if (!user) {
-    return { ok: false, error: "auth.errors.invalidCredentials" };
-  }
-
-  const session = { id: user.id, name: user.name, email: user.email };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return { ok: true, user };
+  return postAuth("login", {
+    email,
+    password,
+  });
 }
 
 export function logoutClient() {
