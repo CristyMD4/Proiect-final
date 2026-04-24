@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { adminLogout, requireAdmin } from "../lib/adminAuth";
 import { seedIfEmpty } from "../lib/storage";
-
+//TEST
 const NAV_ITEMS = [
   { to: "/admin/dashboard", label: "Dashboard", icon: "D" },
   { to: "/admin/bookings", label: "Bookings", icon: "B" },
