@@ -1,18 +1,10 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import Section from "../components/Section";
 import { Icon } from "../components/Icons";
 import { addMessage, uid, seedIfEmpty } from "../lib/storage";
 
-type ContactFormState = {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-};
-
-const INITIAL_FORM: ContactFormState = {
+const INITIAL_FORM = {
   name: "",
   email: "",
   phone: "",
@@ -35,7 +27,7 @@ const CONTACT_DETAILS = [
     titleKey: "contact.email",
     value: "info@sparklewash.com",
   },
-] as const;
+];
 
 const CONTACT_STATS = [
   { label: "Reply window", value: "2h", detail: "Fast replies during operating hours." },
@@ -45,14 +37,14 @@ const CONTACT_STATS = [
 
 export default function Contact() {
   const { t } = useTranslation();
-  const [form, setForm] = useState<ContactFormState>(INITIAL_FORM);
+  const [form, setForm] = useState(INITIAL_FORM);
 
-  function onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function onChange(event) {
     const { name, value } = event.target;
     setForm((previous) => ({ ...previous, [name]: value }));
   }
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  function submit(event) {
     event.preventDefault();
     seedIfEmpty();
     addMessage({

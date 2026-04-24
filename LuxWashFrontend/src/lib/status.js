@@ -1,13 +1,4 @@
-import type { Booking } from "../types/app";
-
-type BookingStats = {
-  total: number;
-  byStatus: Record<string, number>;
-  topService: string;
-  revenue: number;
-};
-
-const PRICE_MAP: Record<string, number> = {
+const PRICE_MAP = {
   "Self-Service": 8,
   "Express Wash": 25,
   "Spalare Express": 25,
@@ -18,14 +9,14 @@ const PRICE_MAP: Record<string, number> = {
   Interior: 35,
 };
 
-export function calcStats(bookings: Booking[] = []): BookingStats {
+export function calcStats(bookings = []) {
   const total = bookings.length;
-  const byStatus = bookings.reduce<Record<string, number>>((acc, booking) => {
+  const byStatus = bookings.reduce((acc, booking) => {
     acc[booking.status] = (acc[booking.status] || 0) + 1;
     return acc;
   }, {});
 
-  const byService = bookings.reduce<Record<string, number>>((acc, booking) => {
+  const byService = bookings.reduce((acc, booking) => {
     const service = booking.service || "Unknown";
     acc[service] = (acc[service] || 0) + 1;
     return acc;

@@ -1,13 +1,4 @@
-import type { ReactNode } from "react";
-
-type SectionProps = {
-  title?: ReactNode;
-  subtitle?: ReactNode;
-  children: ReactNode;
-  className?: string;
-};
-
-export default function Section({ title, subtitle, children, className = "" }: SectionProps) {
+export default function Section({ title, subtitle, children, className = "" }) {
   return (
     <section className={"py-16 " + className}>
       <div className="container-page">

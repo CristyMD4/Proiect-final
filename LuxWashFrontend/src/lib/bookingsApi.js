@@ -1,26 +1,21 @@
-import type { BookingDraft } from "../types/app";
 import { apiFetch } from "./apiClient";
 import { getClientSession } from "./clientAuth";
 import { addBooking, listBookings, updateBooking } from "./storage";
 
-type BookingQuery = {
-  email?: string;
-};
-
-function toQueryString(query: BookingQuery = {}) {
+function toQueryString(query = {}) {
   const params = new URLSearchParams();
   if (query.email) params.set("email", query.email);
   const value = params.toString();
   return value ? `?${value}` : "";
 }
 
-function localBookings(query: BookingQuery = {}) {
+function localBookings(query = {}) {
   const items = listBookings();
   if (!query.email) return items;
   return items.filter((booking) => (booking.email || "").toLowerCase() === query.email?.toLowerCase());
 }
 
-export async function getBookings(query: BookingQuery = {}) {
+export async function getBookings(query = {}) {
   try {
     return await apiFetch(`/api/Bookings${toQueryString(query)}`);
   } catch {
@@ -33,7 +28,7 @@ export async function getMyBookings() {
   return getBookings({ email: session?.email || undefined });
 }
 
-export async function createBooking(payload: BookingDraft) {
+export async function createBooking(payload) {
   try {
     return await apiFetch("/api/Bookings", {
       method: "POST",
@@ -44,7 +39,7 @@ export async function createBooking(payload: BookingDraft) {
   }
 }
 
-export async function cancelBooking(id: string) {
+export async function cancelBooking(id) {
   try {
     return await apiFetch(`/api/Bookings/${id}`, {
       method: "PATCH",

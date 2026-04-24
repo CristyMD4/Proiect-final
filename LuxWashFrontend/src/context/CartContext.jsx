@@ -1,5 +1,4 @@
 import { createContext, useCallback, useContext, useState } from "react";
-import type { ReactNode } from "react";
 import {
   getCart,
   addToCart as storageAdd,
@@ -9,26 +8,9 @@ import {
   listProducts,
 } from "../lib/shopStorage";
 
-type CartItem = ReturnType<typeof listProducts>[number] & {
-  quantity: number;
-};
+const CartCtx = createContext(null);
 
-type CartContextValue = {
-  cartItems: CartItem[];
-  cartCount: number;
-  addToCart: (id: string) => void;
-  removeFromCart: (id: string) => void;
-  updateQty: (id: string, qty: number) => void;
-  clearCart: () => void;
-};
-
-type CartProviderProps = {
-  children: ReactNode;
-};
-
-const CartCtx = createContext<CartContextValue | null>(null);
-
-function enrichCart(rawCart: Array<{ id: string; quantity: number }>) {
+function enrichCart(rawCart) {
   const products = listProducts();
 
   return rawCart
@@ -36,25 +18,25 @@ function enrichCart(rawCart: Array<{ id: string; quantity: number }>) {
       const product = products.find((item) => item.id === id);
       return product ? { ...product, quantity } : null;
     })
-    .filter(Boolean) as CartItem[];
+    .filter(Boolean);
 }
 
-export function CartProvider({ children }: CartProviderProps) {
+export function CartProvider({ children }) {
   const [raw, setRaw] = useState(() => getCart());
 
   const refresh = useCallback(() => setRaw(getCart()), []);
 
-  const addToCart = useCallback((id: string) => {
+  const addToCart = useCallback((id) => {
     storageAdd(id);
     refresh();
   }, [refresh]);
 
-  const removeFromCart = useCallback((id: string) => {
+  const removeFromCart = useCallback((id) => {
     storageRemove(id);
     refresh();
   }, [refresh]);
 
-  const updateQty = useCallback((id: string, qty: number) => {
+  const updateQty = useCallback((id, qty) => {
     storageUpdate(id, qty);
     refresh();
   }, [refresh]);

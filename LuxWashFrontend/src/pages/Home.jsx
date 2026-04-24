@@ -7,88 +7,21 @@ import { Icon } from "../components/Icons";
 import { listProducts } from "../lib/shopStorage";
 import { useCart } from "../context/CartContext";
 
-type Product = ReturnType<typeof listProducts>[number];
-
-type IconName =
-  | "sparkle"
-  | "drop"
-  | "wand"
-  | "clock"
-  | "shield"
-  | "badge"
-  | "thumb"
-  | "phone"
-  | "pin"
-  | "mail"
-  | "user"
-  | "calendar"
-  | "eye"
-  | "cart";
-
-type AddedState = Record<string, boolean>;
-
-type ServiceCardProps = {
-  icon: IconName;
-  title: string;
-  desc: string;
-};
-
-type PlanProps = {
-  name: string;
-  tagline: string;
-  price: string;
-  unit: string;
-  features: string[];
-  featured?: boolean;
-};
-
-type ShopPreviewCardProps = {
-  product: Product;
-  onAdd: (id: string) => void;
-  added: boolean;
-};
-
-type ShopPreviewSliderProps = {
-  products: Product[];
-  onAdd: (id: string) => void;
-  addedIds: AddedState;
-};
-
-type WhyCardProps = ServiceCardProps;
-
-type TestimonialProps = {
-  name: string;
-  role: string;
-  text: string;
-};
-
-type OperationsMetric = {
-  label: string;
-  value: string;
-  detail: string;
-};
-
-type WorkflowStep = {
-  title: string;
-  description: string;
-  icon: IconName;
-};
-
-const OPERATIONS_METRICS: OperationsMetric[] = [
+const OPERATIONS_METRICS = [
   { label: "Fulfillment", value: "24h", detail: "Average response time for online enquiries and booking follow-up." },
   { label: "Retention", value: "78%", detail: "Returning customers across wash, detailing, and product orders." },
   { label: "Capacity", value: "42", detail: "Weekly premium-detailing slots managed through the booking flow." },
   { label: "Quality", value: "4.9/5", detail: "Average satisfaction score across recent client feedback." },
 ];
 
-const WORKFLOW_STEPS: WorkflowStep[] = [
+const WORKFLOW_STEPS = [
   { icon: "calendar", title: "Book the right service", description: "Customers choose a package, preferred day, and add-on services in one clean flow." },
   { icon: "eye", title: "Prepare the vehicle plan", description: "The team reviews requirements, confirms timing, and aligns labor with service complexity." },
   { icon: "sparkle", title: "Execute with premium products", description: "Every wash and detailing task follows a repeatable, quality-controlled process." },
   { icon: "thumb", title: "Track loyalty and re-book", description: "Clients return through their account area, check bookings, and purchase products online." },
 ];
 
-function ServiceCard({ icon, title, desc }: ServiceCardProps) {
+function ServiceCard({ icon, title, desc }) {
   return (
     <div className="card sw-tilt-card sw-reveal-up p-7">
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-[var(--sw-blue)]">
@@ -100,7 +33,7 @@ function ServiceCard({ icon, title, desc }: ServiceCardProps) {
   );
 }
 
-function Plan({ name, tagline, price, unit, features, featured = false }: PlanProps) {
+function Plan({ name, tagline, price, unit, features = [], featured = false }) {
   return (
     <div className={"card sw-tilt-card sw-reveal-up relative p-8 " + (featured ? "ring-2 ring-[var(--sw-blue)]" : "")}>
       {featured && (
@@ -149,7 +82,7 @@ const PRODUCT_ART = {
   "clay-bar": "Clay",
 };
 
-function ShopPreviewCard({ product, onAdd, added }: ShopPreviewCardProps) {
+function ShopPreviewCard({ product, onAdd, added }) {
   return (
     <div className="card sw-tilt-card flex h-full flex-col p-5">
       <div className="mb-4 flex h-32 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-50 via-white to-slate-100 text-lg font-black uppercase tracking-[0.2em] text-[var(--sw-blue)]">
@@ -184,8 +117,8 @@ function ShopPreviewCard({ product, onAdd, added }: ShopPreviewCardProps) {
   );
 }
 
-function ShopPreviewSlider({ products, onAdd, addedIds }: ShopPreviewSliderProps) {
-  const trackRef = React.useRef<HTMLDivElement | null>(null);
+function ShopPreviewSlider({ products, onAdd, addedIds }) {
+  const trackRef = React.useRef(null);
   const [activePage, setActivePage] = React.useState(0);
   const [itemsPerView, setItemsPerView] = React.useState(1);
 
@@ -209,7 +142,7 @@ function ShopPreviewSlider({ products, onAdd, addedIds }: ShopPreviewSliderProps
 
   const totalPages = Math.max(1, Math.ceil(products.length / itemsPerView));
 
-  const scrollToPage = (page: number) => {
+  const scrollToPage = (page) => {
     const track = trackRef.current;
     if (!track) return;
 
@@ -295,7 +228,7 @@ function ShopPreviewSlider({ products, onAdd, addedIds }: ShopPreviewSliderProps
   );
 }
 
-function WhyCard({ icon, title, desc }: WhyCardProps) {
+function WhyCard({ icon, title, desc }) {
   return (
     <div className="card sw-tilt-card p-7">
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-[var(--sw-blue)]">
@@ -307,7 +240,7 @@ function WhyCard({ icon, title, desc }: WhyCardProps) {
   );
 }
 
-function Testimonial({ name, role, text }: TestimonialProps) {
+function Testimonial({ name, role, text }) {
   return (
     <div className="card sw-tilt-card p-7">
       <div className="flex items-start gap-4">
@@ -327,7 +260,7 @@ function Testimonial({ name, role, text }: TestimonialProps) {
 export default function Home() {
   const { t } = useTranslation();
   const { addToCart } = useCart();
-  const [addedIds, setAddedIds] = React.useState<AddedState>({});
+  const [addedIds, setAddedIds] = React.useState({});
   const rawHeroTitle = t("hero.title");
 
   const heroTitleParts = React.useMemo(() => {
@@ -349,10 +282,11 @@ export default function Home() {
     return [words.slice(0, middle).join(" "), words.slice(middle).join(" ")];
   }, [rawHeroTitle]);
 
-  const svc = (t("services.cards", { returnObjects: true }) || {}) as Record<string, { title: string; desc: string }>;
-  const plans = (t("pricing.plans", { returnObjects: true }) || {}) as Record<string, PlanProps>;
-  const why = (t("why.items", { returnObjects: true }) || {}) as Record<string, { title: string; desc: string }>;
-  const testimonials = (t("testimonials.cards", { returnObjects: true }) || []) as TestimonialProps[];
+  const svc = t("services.cards", { returnObjects: true }) || {};
+  const plans = t("pricing.plans", { returnObjects: true }) || {};
+  const why = t("why.items", { returnObjects: true }) || {};
+  const testimonialsRaw = t("testimonials.cards", { returnObjects: true });
+  const testimonials = Array.isArray(testimonialsRaw) ? testimonialsRaw : [];
 
   const featuredProducts = React.useMemo(() => {
     const all = listProducts();
@@ -365,7 +299,7 @@ export default function Home() {
     return Array.from(new Set(featuredProducts.map((product) => product.category))).slice(0, 3);
   }, [featuredProducts]);
 
-  const handleAdd = (id: string) => {
+  const handleAdd = (id) => {
     addToCart(id);
     setAddedIds((previous) => ({ ...previous, [id]: true }));
     setTimeout(() => setAddedIds((previous) => ({ ...previous, [id]: false })), 1500);

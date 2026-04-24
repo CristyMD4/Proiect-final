@@ -7,27 +7,23 @@ import Section from "../components/Section";
 import { requestPermission, notifyBookingConfirmed, scheduleReminder } from "../lib/notifications";
 import { listLocations, seedIfEmpty, uid } from "../lib/storage";
 import { createBooking } from "../lib/bookingsApi";
-import type { BookingDraft, Location } from "../types/app";
-
-type BookingFormValues = {
-  fullName: string;
-  email: string;
-  phone: string;
-  vehicle: string;
-  locationId: string;
-  service: string;
-  date: string;
-  time: string;
-  notes?: string;
-};
 
 export default function Book() {
   const { t } = useTranslation();
 
-  const vehicleOpts = useMemo(() => (t("book.opts.vehicle", { returnObjects: true }) || []) as string[], [t]);
-  const serviceOpts = useMemo(() => (t("book.opts.service", { returnObjects: true }) || []) as string[], [t]);
-  const timeOpts = useMemo(() => (t("book.opts.time", { returnObjects: true }) || []) as string[], [t]);
-  const locations = useMemo(() => listLocations() as Location[], []);
+  const vehicleOpts = useMemo(() => {
+    const values = t("book.opts.vehicle", { returnObjects: true });
+    return Array.isArray(values) ? values : [];
+  }, [t]);
+  const serviceOpts = useMemo(() => {
+    const values = t("book.opts.service", { returnObjects: true });
+    return Array.isArray(values) ? values : [];
+  }, [t]);
+  const timeOpts = useMemo(() => {
+    const values = t("book.opts.time", { returnObjects: true });
+    return Array.isArray(values) ? values : [];
+  }, [t]);
+  const locations = useMemo(() => listLocations(), []);
 
   const schema = useMemo(
     () =>
@@ -50,7 +46,7 @@ export default function Book() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<BookingFormValues>({
+  } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       fullName: "",
@@ -65,14 +61,14 @@ export default function Book() {
     },
   });
 
-  const FieldError = ({ name }: { name: keyof BookingFormValues }) =>
+  const FieldError = ({ name }) =>
     errors[name]?.message ? <p className="mt-1 text-sm text-rose-600">{String(errors[name]?.message)}</p> : null;
 
-  const onSubmit = async (data: BookingFormValues) => {
+  const onSubmit = async (data) => {
     seedIfEmpty();
     const id = uid("BKG");
 
-    const booking: BookingDraft = {
+    const booking = {
       id,
       name: data.fullName,
       email: data.email,

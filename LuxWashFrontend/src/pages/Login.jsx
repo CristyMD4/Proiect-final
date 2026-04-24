@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { adminLogin, getAdminSession } from "../lib/adminAuth";
 import { getClientSession, loginClient } from "../lib/clientAuth";
 import { getEmployeeSession, loginEmployee } from "../lib/employeeAuth";
 
-type LoginRedirectResult = {
-  ok: boolean;
-  error?: string;
-  redirect?: string;
-};
-
-async function detectRoleAndLogin(email: string, password: string): Promise<LoginRedirectResult> {
+async function detectRoleAndLogin(email, password) {
   const adminResult = adminLogin(email, password);
   if (adminResult.ok) {
     return { ...adminResult, redirect: "/admin/dashboard" };
@@ -64,7 +57,7 @@ export default function Login() {
     }
   }, [navigate]);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setErr("");
     setLoading(true);
@@ -78,7 +71,7 @@ export default function Login() {
       return;
     }
 
-    navigate(result.redirect, { replace: true });
+    navigate(result.redirect || "/", { replace: true });
   };
 
   return (

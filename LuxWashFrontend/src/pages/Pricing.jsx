@@ -2,28 +2,13 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Section from "../components/Section";
 
-type PricingPlan = {
-  name: string;
-  tagline: string;
-  price: string;
-  unit: string;
-  features: string[];
-  featured?: boolean;
-};
-
-type PricingPlans = {
-  self: PricingPlan;
-  express: PricingPlan;
-  premium: PricingPlan;
-};
-
 const PRICING_METRICS = [
   { label: "Entry point", value: "$8", detail: "Simple self-service access for quick cleaning needs." },
   { label: "Popular tier", value: "Express", detail: "Balanced pricing for repeat local customers." },
   { label: "Upsell path", value: "Detailing", detail: "Higher-value premium packages for deeper care." },
 ];
 
-function Plan({ name, tagline, price, unit, features, featured }: PricingPlan) {
+function Plan({ name, tagline, price, unit, features = [], featured }) {
   return (
     <div className={"card sw-tilt-card relative overflow-hidden p-8 " + (featured ? "ring-2 ring-[var(--sw-blue)] shadow-[0_20px_50px_rgba(29,78,216,0.16)]" : "")}>
       {featured && (
@@ -54,7 +39,7 @@ function Plan({ name, tagline, price, unit, features, featured }: PricingPlan) {
 
 export default function Pricing() {
   const { t } = useTranslation();
-  const plans = t("pricing.plans", { returnObjects: true }) as PricingPlans;
+  const plans = t("pricing.plans", { returnObjects: true }) || {};
 
   return (
     <div>
@@ -103,9 +88,9 @@ export default function Pricing() {
 
       <Section title={t("pricing.title")} subtitle={t("pricing.subtitle")} className="bg-white/55">
         <div className="grid gap-6 lg:grid-cols-3">
-          <Plan {...plans.self} />
-          <Plan {...plans.express} featured />
-          <Plan {...plans.premium} />
+          <Plan {...(plans.self || {})} />
+          <Plan {...(plans.express || {})} featured />
+          <Plan {...(plans.premium || {})} />
         </div>
 
         <div className="panel sw-reveal-up mt-10 overflow-hidden p-7 md:p-8">
